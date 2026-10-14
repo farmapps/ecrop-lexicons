@@ -1,0 +1,47 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.inboundDeliveryBySupplier",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "Details of materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound\ndelivery describes a certain amount of a certain product acquired by a grower through an order to\na supplier.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "thirdPartyIds",
+          "dateOfDelivery",
+          "quantity",
+          "product",
+          "location"
+        ],
+        "properties": {
+          "thirdPartyIds": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the inbound delivery is identified by third parties."
+          },
+          "dateOfDelivery": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "Date at which the product is delivered at the location of the grower (\"YYYY-MM-DD\")"
+          },
+          "quantity": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#measureType",
+            "description": "Quantity of the product delivered to the grower."
+          },
+          "product": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#productDetails"
+          },
+          "location": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#productionLocationDetails",
+            "description": "Identification of the production location of the grower at which the product is delivered"
+          }
+        }
+      }
+    }
+  }
+}

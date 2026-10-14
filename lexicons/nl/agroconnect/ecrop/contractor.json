@@ -1,0 +1,61 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.contractor",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "The details of the contractor who performs tasks and operations on behalf of a grower",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "thirdPartyIds",
+          "name"
+        ],
+        "properties": {
+          "thirdPartyIds": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the party"
+          },
+          "personName": {
+            "type": "string",
+            "description": "Persons name"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the party"
+          },
+          "telefaxNumber": {
+            "type": "string",
+            "description": "Telefax number of the party"
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "E-mail address of the party"
+          },
+          "iban": {
+            "type": "string",
+            "description": "International Bank Account Number (IBAN) of the party"
+          },
+          "websiteUrl": {
+            "type": "string",
+            "description": "Address of the website of the party"
+          },
+          "postalAddress": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#postalAddressType"
+          },
+          "visitorsAddress": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#visitorsAddressType"
+          }
+        }
+      }
+    }
+  }
+}

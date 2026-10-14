@@ -1,0 +1,26 @@
+[
+  {
+    "id": {
+      "content": "8b2c1a7e-4f3d-4e9c-a1b2-3c4d5e6f7a8b",
+      "schemeId": "com.my-mps.codelist.guid"
+    },
+    "thirdPartyIds": [
+      {
+        "content": "8700778121125",
+        "schemeId": "com.gs1.codelist.gln"
+      }
+    ],
+    "name": "Kas 1",
+    "visitorsAddress": {
+      "postalCode": "2675 SJ",
+      "cityName": "Honselersdijk",
+      "streetName": "Gantellaan",
+      "streetNumber": "8",
+      "country": {
+        "content": "NL",
+        "listId": "iso.3166-1.alpha2"
+      },
+      "countryName": "Netherlands"
+    }
+  }
+]

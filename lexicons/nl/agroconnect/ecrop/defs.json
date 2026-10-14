@@ -1,0 +1,2155 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.defs",
+  "description": "Shared types of the AgroConnect eCrop API 1.1.0 (converted from OpenAPI).",
+  "defs": {
+    "posInt32Type": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "posInt64Type": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dateType": {
+      "type": "string",
+      "description": "Date with RFC 9557 (prev. RFC 3339)/ISO-8601 standard date format standard date format \"YYYY-MM-DD\" Format: date. Pattern: ^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "dateTimeType": {
+      "type": "string",
+      "description": "Datetime with RFC 9557 (prev. RFC 3339)/ISO-8601 standard (local) datetime format \"YYYY-MM-DDThh:mm:ssZ\" or \"YYYY-MM-DDThh:mm:ss±hh:mm\"",
+      "format": "datetime"
+    },
+    "timeType": {
+      "type": "string",
+      "description": "Time with RFC 9557 (prev. RFC 3339) full-time format \"hh:mm:ss+/-hh:mm\" Format: time. Pattern: ^(\\d{2}):(\\d{2}):(\\d{2})(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})$"
+    },
+    "timeLocalType": {
+      "type": "string",
+      "description": "Time with RFC 9557 (prev. RFC 3339) partial-time format \"hh:mm:ss\" Format: time-local. Pattern: ^(\\d{2}):(\\d{2}):(\\d{2})$"
+    },
+    "yearType": {
+      "type": "string",
+      "description": "Year with RFC 9557 (prev. RFC 3339)/ISO-8601 standard date format \"YYYY\" Pattern: ^\\d{4}$"
+    },
+    "nsidType": {
+      "type": "string",
+      "description": "Namespace Identifier (NSID) Pattern: ^[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(\\.[a-zA-Z]([a-zA-Z0-9]{0,62})?)$"
+    },
+    "primaryIdContentType": {
+      "type": "string",
+      "description": "The type for the content-part of primary ids of resources Format: uuid."
+    },
+    "primaryIdSchemeIdType": {
+      "type": "string",
+      "description": "The type for the schemeId part of primary ids of resources"
+    },
+    "primaryIdType": {
+      "type": "object",
+      "description": "Primary identification for the resources as assigned by the server",
+      "required": [
+        "content",
+        "schemeId"
+      ],
+      "properties": {
+        "content": {
+          "type": "ref",
+          "ref": "#primaryIdContentType"
+        },
+        "schemeId": {
+          "type": "ref",
+          "ref": "#primaryIdSchemeIdType"
+        }
+      }
+    },
+    "primaryId": {
+      "type": "object",
+      "description": "Primary identification for the resources as assigned by the server",
+      "required": [
+        "primaryId"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        }
+      }
+    },
+    "idType": {
+      "type": "object",
+      "description": "Generice IdType with which a resource is identified",
+      "required": [
+        "content",
+        "schemeId"
+      ],
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "Identifier value.",
+          "minLength": 1
+        },
+        "schemeId": {
+          "type": "string",
+          "description": "Scheme Id of the identifier.",
+          "minLength": 1
+        }
+      }
+    },
+    "thirdPartyIdsType": {
+      "type": "array",
+      "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties",
+      "items": {
+        "type": "ref",
+        "ref": "#idType"
+      }
+    },
+    "codeType": {
+      "type": "object",
+      "description": "Code Type",
+      "required": [
+        "content",
+        "listId"
+      ],
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "Specific code from the code list that is referred to by listId."
+        },
+        "listId": {
+          "type": "ref",
+          "ref": "#nsidType",
+          "description": "Identifier as namespace identifier (NSID) expression of the standard code list that contains the allowed codes."
+        }
+      }
+    },
+    "measureType": {
+      "type": "object",
+      "description": "Standard data type for expressing a measurement with a value and unitcode. To be used for all types of measurements and quantities in this class model.",
+      "required": [
+        "content",
+        "unitCode",
+        "scaleFactor"
+      ],
+      "properties": {
+        "content": {
+          "type": "integer",
+          "description": "Expresses the measured value of the measurement. Integer mantissa, scaled by scaleFactor (originally a float)."
+        },
+        "unitCode": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "The code that refers to the standard unit or dimension to express the value of this measurement. E.g. kg for kilogram.\nlistId: nl.agroconnect.codelist.cl020"
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25."
+        }
+      }
+    },
+    "characteristicType": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "code": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Content and listId of the code list that contains the coding of characteristics for a specific domain:\n\nFor instance:\nThe code list id for crop and operations characteristics for arable farming is nl.agrconnect.codelist.cl265."
+        },
+        "issueDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The date the characteristic was captured."
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Begin date of the period this characteristic is or was valid."
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "End date of the period this characteristic is or was valid."
+        },
+        "stringValue": {
+          "type": "string",
+          "description": "String value of the charateristic"
+        },
+        "booleanValue": {
+          "type": "boolean",
+          "description": "Boolean value (true/false) of the charateristic"
+        },
+        "dateValue": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Date value of the characteristic"
+        },
+        "dateTimeValue": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "Date value of the characteristic"
+        },
+        "codeValue": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code value and code listid of the characteristic"
+        },
+        "measureValue": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Numeric value and unit code/listid of the characteristic"
+        }
+      },
+      "description": "Generic data type for linked characteristics to a crop, task, operation, allocation, etc.. Exactly one of stringValue, booleanValue, dateValue, dateTimeValue, codeValue, measureValue must be present."
+    },
+    "countryCodeType": {
+      "type": "object",
+      "description": "Country codes: 2 letter ISO 3166.",
+      "required": [
+        "content",
+        "listId"
+      ],
+      "properties": {
+        "content": {
+          "type": "string",
+          "description": "Specific code from the code list that is referred to by listId."
+        },
+        "listId": {
+          "type": "ref",
+          "ref": "#nsidType",
+          "description": "Identifier as namespace identifier (NSID) expression of the standard code list that contains the allowed codes."
+        }
+      }
+    },
+    "addressType": {
+      "type": "object",
+      "description": "Generic type for physical addresses",
+      "required": [
+        "postalCode",
+        "cityName",
+        "country"
+      ],
+      "properties": {
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code of the address"
+        },
+        "cityName": {
+          "type": "string",
+          "description": "City name"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name"
+        },
+        "streetNumber": {
+          "type": "string",
+          "description": "Street number"
+        },
+        "streetNumberExtension": {
+          "type": "string",
+          "description": "Extension to the street number (e.g. an addition letter or suffix)"
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType"
+        },
+        "countryName": {
+          "type": "string",
+          "description": "Country name"
+        },
+        "postalBoxId": {
+          "type": "string",
+          "description": "Postal box number"
+        }
+      }
+    },
+    "postalAddressType": {
+      "type": "object",
+      "description": "Specific ype for postal addresses",
+      "required": [
+        "postalCode",
+        "cityName",
+        "country"
+      ],
+      "properties": {
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code of the address"
+        },
+        "cityName": {
+          "type": "string",
+          "description": "City name"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name"
+        },
+        "streetNumber": {
+          "type": "string",
+          "description": "Street number"
+        },
+        "streetNumberExtension": {
+          "type": "string",
+          "description": "Extension to the street number (e.g. an addition letter or suffix)"
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType"
+        },
+        "countryName": {
+          "type": "string",
+          "description": "Country name"
+        },
+        "postalBoxId": {
+          "type": "string",
+          "description": "Postal box number"
+        }
+      }
+    },
+    "visitorsAddressType": {
+      "type": "object",
+      "description": "Specific ype for visitor addresses",
+      "required": [
+        "postalCode",
+        "cityName",
+        "country"
+      ],
+      "properties": {
+        "postalCode": {
+          "type": "string",
+          "description": "Postal code of the address"
+        },
+        "cityName": {
+          "type": "string",
+          "description": "City name"
+        },
+        "streetName": {
+          "type": "string",
+          "description": "Street name"
+        },
+        "streetNumber": {
+          "type": "string",
+          "description": "Street number"
+        },
+        "streetNumberExtension": {
+          "type": "string",
+          "description": "Extension to the street number (e.g. an addition letter or suffix)"
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType"
+        },
+        "countryName": {
+          "type": "string",
+          "description": "Country name"
+        },
+        "postalBoxId": {
+          "type": "string",
+          "description": "Postal box number"
+        }
+      }
+    },
+    "plotType": {
+      "type": "string",
+      "description": "The type of production surface to grow plants. Can be a crop field for arable farming or a moving table (platform) for potted plants in floriculture.",
+      "knownValues": [
+        "CROPFIELD",
+        "ACTIVITYFIELD",
+        "TABLE"
+      ]
+    },
+    "processStateType": {
+      "type": "string",
+      "description": "Indication of the execution status of the task or operation in terms of: proposed, planned, executed. Code list: nl.clL256",
+      "knownValues": [
+        "PROPOSED",
+        "PLANNED",
+        "COMPLETED"
+      ]
+    },
+    "productionSequenceType": {
+      "type": "string",
+      "description": "Indicates if and how the crop is combined with other crops. Enumeration: PRE_CROP = voorteelt, MAIN_CROP = hoofdteelt, FOLLOWUP_CROP = volgteelt, MIXED_CROP = mengteelt",
+      "knownValues": [
+        "PRE_CROP",
+        "MAIN_CROP",
+        "FOLLOWUP_CROP",
+        "MIXED_CROP"
+      ]
+    },
+    "problemDetails": {
+      "type": "object",
+      "description": "Problem details based on the [\"Problem Details for HTTP APIs\" specification, RFC 9457](https://datatracker.ietf.org/doc/html/rfc9457).\n\nRemark: According to Proposal NL API Design Rules 2.1 optional properties status, title and detail are required, type and instance are optional",
+      "required": [
+        "status",
+        "title",
+        "detail"
+      ],
+      "properties": {
+        "status": {
+          "type": "integer",
+          "description": "The HTTP status code generated by the origin server for this occurrence of the problem.",
+          "minimum": 100,
+          "maximum": 599
+        },
+        "title": {
+          "type": "string",
+          "description": "A short, human-readable summary of the problem type."
+        },
+        "detail": {
+          "type": "string",
+          "description": "A human-readable explanation specific to this occurrence of the problem."
+        },
+        "problemType": {
+          "type": "string",
+          "description": "A URI reference that identifies the problem type. Format: uri-reference. (OpenAPI property name: 'type')"
+        },
+        "instance": {
+          "type": "string",
+          "description": "A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced. Format: uri-reference."
+        },
+        "errors": {
+          "type": "array",
+          "description": "List of individual validation errors, allowing multiple issues encountered while processing the request to be reported together in a single response (per AASG rule H007). This is an AASG-specific extension member of RFC 9457 Problem Details, not part of the base RFC itself.",
+          "items": {
+            "type": "object",
+            "required": [
+              "field",
+              "message"
+            ],
+            "properties": {
+              "field": {
+                "type": "string",
+                "description": "JSON Pointer (RFC 6901) to the field in the request payload or query that caused the error, e.g. \"/postalAddress/postalCode\"."
+              },
+              "message": {
+                "type": "string",
+                "description": "Human-readable description of the validation error for this field."
+              }
+            }
+          }
+        }
+      }
+    },
+    "jsonPatch": {
+      "type": "array",
+      "description": "Request payload for PATCH operations: a JSON Patch document as defined in [\"JavaScript Object Notation (JSON) Patch\", RFC 6902](https://datatracker.ietf.org/doc/html/rfc6902), per AASG rule P012. Use media type `application/json-patch+json`.\n\nThe document is an array of operation objects, applied sequentially in the order given. If any operation fails, the whole patch document MUST NOT be applied (RFC 6902, section 5).",
+      "minLength": 1,
+      "items": {
+        "type": "ref",
+        "ref": "#jsonPatchOperation"
+      }
+    },
+    "link": {
+      "type": "object",
+      "description": "A hyperlink based on RFC 8288 Web Linking, following the OGC API - Common Hyperlink Schema. Used consistently across both the OGC API Features resources and embedded business objects in this AASG.",
+      "required": [
+        "href",
+        "rel"
+      ],
+      "properties": {
+        "href": {
+          "type": "string",
+          "description": "The target URI of the link.",
+          "format": "uri"
+        },
+        "rel": {
+          "type": "string",
+          "description": "The link relation type. Prefer values from the IANA Link Relations Registry; use the OGC Link Relation Registry or a custom AASG-defined URI for relation types not covered by IANA."
+        },
+        "mediaType": {
+          "type": "string",
+          "description": "A hint at the media type of the link target. (OpenAPI property name: 'type')"
+        },
+        "title": {
+          "type": "string",
+          "description": "A human-readable label for the link target."
+        },
+        "hreflang": {
+          "type": "string",
+          "description": "A hint at the language of the link target."
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "description": "A collection named \"links\"of RFC 8288 conformant links",
+      "properties": {
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#link"
+          }
+        }
+      }
+    },
+    "health": {
+      "type": "object",
+      "description": "Health Check Response Format for HTTP APIs",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "description": "Indicates whether the service status is acceptable or not",
+          "knownValues": [
+            "pass",
+            "warn",
+            "fail"
+          ]
+        }
+      }
+    },
+    "partyDetails": {
+      "type": "object",
+      "description": "Data about the Party that is involved in producing or processing the crop and or agricultural produce.",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "grower": {
+      "type": "object",
+      "description": "The grower (e.g. the farmer) that is responsible for the cultivation of the crop.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "growerDetails": {
+      "type": "object",
+      "description": "The details of the grower (e.g. the farmer) that is responsible for the cultivation of the crop.",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "supplier": {
+      "type": "object",
+      "description": "The supplier who delivers goods to a grower",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "supplierDetails": {
+      "type": "object",
+      "description": "The details of the supplier who delivers goods to a grower",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "contractor": {
+      "type": "object",
+      "description": "The contractor who performs tasks and operations on behalf of a grower, for the growers he is granted access to",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "contractorDetails": {
+      "type": "object",
+      "description": "The details of the contractor who performs tasks and operations on behalf of a grower",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "productionLocation": {
+      "type": "object",
+      "description": "The the entity that is responsible for cultivation the crops.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "productionLocationDetails": {
+      "type": "object",
+      "description": "The details of the entity that is responsible for cultivation the crops.",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the party"
+        },
+        "personName": {
+          "type": "string",
+          "description": "Persons name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the party"
+        },
+        "telefaxNumber": {
+          "type": "string",
+          "description": "Telefax number of the party"
+        },
+        "emailAddress": {
+          "type": "string",
+          "description": "E-mail address of the party"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International Bank Account Number (IBAN) of the party"
+        },
+        "websiteUrl": {
+          "type": "string",
+          "description": "Address of the website of the party"
+        },
+        "postalAddress": {
+          "type": "ref",
+          "ref": "#postalAddressType"
+        },
+        "visitorsAddress": {
+          "type": "ref",
+          "ref": "#visitorsAddressType"
+        }
+      }
+    },
+    "assetDetails": {
+      "type": "object",
+      "description": "Details of the entity of a tangible object on which operations can be performed.\nE.g.: a crop, a building, a machine, a ditch, a greenhouse, a climate control system, a feeding system, etc.",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The start data of the existence of the asset."
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The end data of the existence of the asset."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "crop": {
+      "type": "object",
+      "description": "The cultivation of a specific crop type (e.g. potato, wheat, rice,. etc.) on one or more plots during a specific period of time, specified by startDateTime and endDateTime.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name",
+        "year",
+        "plantSpecies"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The start data of the existence of the asset."
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The end data of the existence of the asset."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "year": {
+          "type": "integer",
+          "description": "Indication of the year in which the cultivation is harvested."
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType",
+          "description": "Country where crop is grown. Code list: ISO country code: 2 letter ISO-3166."
+        },
+        "region": {
+          "type": "string",
+          "description": "Region of a country the cultivation took place.\\nFor eCrop in The Netherlands for this code list code list nl.cl044 is used."
+        },
+        "useTitle": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code to indicate the type of legal ownership of the field that is used for the crop. For eCrop in The Netherlands code list nl.cl412 is used for this"
+        },
+        "productionType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates the intensity of growing the crop. In The Netherlands used to report to the MLNV-RVO authority. Code list: nl.cl255"
+        },
+        "productionPurpose": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicator of the produce purpose the crop. For instance: fresh marked, animal feed, seed production, etc. Code list: nl.cl251"
+        },
+        "productionSequence": {
+          "type": "ref",
+          "ref": "#productionSequenceType"
+        },
+        "regularOrOrganic": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Production protocol: indicates whether this crop is classified as grown organic or non-organic. Code list: nl.cl015"
+        },
+        "netArea": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The net (netto) area (in m2, hectare, etc.) of the surface that is used for growing the crop."
+        },
+        "growEnvironment": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates in what type of environment the crop is grown; e.g. in the open air, in a greenhouse, etc. Code list: nl.cl299"
+        },
+        "growMedium": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates in what medium the crop is rooted; for instance in soil, in substrate, on bark, etc. Code list: nl.cl300"
+        },
+        "trackTillage": {
+          "type": "boolean",
+          "description": "Indicates whether the cultivation, over the years, is done in fixed lanes with fixed tracks for machinery.\\n\\ntrue = track tillage is applied\\nfalse = track tillage is not applied"
+        },
+        "plantSpecies": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#plantSpecies"
+          }
+        },
+        "plots": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#plot"
+          }
+        }
+      }
+    },
+    "cropDetails": {
+      "type": "object",
+      "description": "The details of the cultivation of a specific crop type (e.g. potato, wheat, rice,. etc.) on one or more plots during a specific period of time, specified by startDateTime and endDateTime.",
+      "required": [
+        "thirdPartyIds",
+        "name",
+        "year",
+        "plantSpecies"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The start data of the existence of the asset."
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The end data of the existence of the asset."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "year": {
+          "type": "integer",
+          "description": "Indication of the year in which the cultivation is harvested."
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType",
+          "description": "Country where crop is grown. Code list: ISO country code: 2 letter ISO-3166."
+        },
+        "region": {
+          "type": "string",
+          "description": "Region of a country the cultivation took place.\\nFor eCrop in The Netherlands for this code list code list nl.cl044 is used."
+        },
+        "useTitle": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code to indicate the type of legal ownership of the field that is used for the crop. For eCrop in The Netherlands code list nl.cl412 is used for this"
+        },
+        "productionType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates the intensity of growing the crop. In The Netherlands used to report to the MLNV-RVO authority. Code list: nl.cl255"
+        },
+        "productionPurpose": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicator of the produce purpose the crop. For instance: fresh marked, animal feed, seed production, etc. Code list: nl.cl251"
+        },
+        "productionSequence": {
+          "type": "ref",
+          "ref": "#productionSequenceType"
+        },
+        "regularOrOrganic": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Production protocol: indicates whether this crop is classified as grown organic or non-organic. Code list: nl.cl015"
+        },
+        "netArea": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The net (netto) area (in m2, hectare, etc.) of the surface that is used for growing the crop."
+        },
+        "growEnvironment": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates in what type of environment the crop is grown; e.g. in the open air, in a greenhouse, etc. Code list: nl.cl299"
+        },
+        "growMedium": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates in what medium the crop is rooted; for instance in soil, in substrate, on bark, etc. Code list: nl.cl300"
+        },
+        "trackTillage": {
+          "type": "boolean",
+          "description": "Indicates whether the cultivation, over the years, is done in fixed lanes with fixed tracks for machinery.\\n\\ntrue = track tillage is applied\\nfalse = track tillage is not applied"
+        },
+        "plantSpecies": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#plantSpecies"
+          }
+        },
+        "plots": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#plot"
+          }
+        }
+      }
+    },
+    "plantSpecies": {
+      "type": "object",
+      "description": "Crop type at the level of potato, sugar beet, onion, winter wheat, etc.\nFor mixed crops more then one type of crop can be grown in the same period at the same plot.",
+      "required": [
+        "species",
+        "variety"
+      ],
+      "properties": {
+        "species": {
+          "type": "string",
+          "description": "Code of the plant species, at the aggregation level of potato, sugar beet, onion, etc. For eCrop in The Netherlands, code list nl.cl263 is used for crop species."
+        },
+        "variety": {
+          "type": "string",
+          "description": "Identification of the variety of the type of crop that is grown. For eCrop in The Netherlands code list nl.cl232 is used."
+        },
+        "precentageMix": {
+          "type": "integer",
+          "description": "To be used in case of a mixed crop. Indicator of the percentage of this crop species related to the other crop species that are part of this mixed crop. The percentage is based on the weight proportions of the seed of each of the species that are part of the mixed crop. Integer mantissa, scaled by scaleFactor (originally a float)."
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25.",
+          "default": 0
+        }
+      }
+    },
+    "plot": {
+      "type": "object",
+      "description": "Surface (area) that is used to grow plants.\nThe exact location of this surface is specified by either, a greenhouse-location a point location or a border location (using outer and inner polygons).\n\nThe geo-information of a plot is published via the plot-geometry operations. A plot does not store the id of its feature(s): the link with rel `https://ecrop.agroconnect.nl/rel/plot-features` in the `links` of a Plot response is a query for the features that refer to this plot (a \"backlink\"), see GET /collections/plots/items.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name",
+        "plotType",
+        "area"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The start data of the existence of the asset."
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The end data of the existence of the asset."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "plotType": {
+          "type": "ref",
+          "ref": "#plotType",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "area": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The surface (measured in for instance square meters, hectare) of this production plot."
+        },
+        "regularOrOrganic": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates whether this plot is classified for organic production or not.\nProduction protocol: indicates whether this plot is classified  for organic production or not.\nCode list: nl.cl015"
+        },
+        "localSoilType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code for the soil type, as used for a specific use case.\nLocalSoilType code consists of the reference to the code list that is being used plus the code from this code list.\nFor eCrop in arable farming in The Netherlands, code list nl.cl405 is used"
+        },
+        "regulatorySoilType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\nFor eCrop in The Netherlands code list nl.cl405 is used."
+        },
+        "greenhouseLocation": {
+          "type": "ref",
+          "ref": "#greenhouseLocationDetails"
+        }
+      }
+    },
+    "plotDetails": {
+      "type": "object",
+      "description": "Details of the Surface (area) that is used to grow plants.\nThe exact location of this surface is specified by either, a greenhouse-location a point location or a border location (using outer and inner polygons).",
+      "required": [
+        "thirdPartyIds",
+        "name",
+        "plotType",
+        "area"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+        },
+        "name": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The start data of the existence of the asset."
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "The end data of the existence of the asset."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "plotType": {
+          "type": "ref",
+          "ref": "#plotType",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "area": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The surface (measured in for instance square meters, hectare) of this production plot."
+        },
+        "regularOrOrganic": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicates whether this plot is classified for organic production or not.\nProduction protocol: indicates whether this plot is classified  for organic production or not.\nCode list: nl.cl015"
+        },
+        "localSoilType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code for the soil type, as used for a specific use case.\nLocalSoilType code consists of the reference to the code list that is being used plus the code from this code list.\nFor eCrop in arable farming in The Netherlands, code list nl.cl405 is used"
+        },
+        "regulatorySoilType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\nFor eCrop in The Netherlands code list nl.cl405 is used."
+        },
+        "greenhouseLocation": {
+          "type": "ref",
+          "ref": "#greenhouseLocationDetails"
+        }
+      }
+    },
+    "greenhouseLocationDetails": {
+      "type": "object",
+      "description": "Structure with transparent walls and roof designed to regulate temperature and humidity for growing plants.",
+      "required": [
+        "thirdPartyIds",
+        "name"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the greenhouse is identified by third parties"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the greenhouse"
+        },
+        "blockId": {
+          "type": "string",
+          "description": "Identifier of a block (in Dutch: afdeling) within the greenhouse."
+        },
+        "postId": {
+          "type": "string",
+          "description": "Identifier of a post (in Dutch: paal) within the block of the greenhouse"
+        },
+        "upToPostId": {
+          "type": "string",
+          "description": "Identifier of a second post (in Dutch: paal) within the block of the greenhouse.\nThe upToPost can be used to refer to the location between two posts (postId and upToPostId)."
+        },
+        "waterTapId": {
+          "type": "string",
+          "description": "Identifier of a watertap (in Dutch: waterpunt) within a greenhouse."
+        },
+        "hortivationpointBlock": {
+          "type": "string",
+          "description": "Coordinates of the standard Hortivation location reference point for the block"
+        },
+        "xyzReferenceToHotivationPoint": {
+          "type": "string",
+          "description": "The xyz-position to the standard Hortivationpoint of this block within a greenhouse"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "description": "A Task is the execution of one or more Operation's by a ma-machine-system.\nA 'task' consists of one ore more 'operations' that are closely related but involve different assents and resources. All combined operations need to be carried out well coordinated, to execute the task.\nFor instance, the task potato harvesting involves: one tractor pulling the potato harvester, 2 units to take care of the transport of the harvested potatoes to the barn, equipment at the barn to unload the transport units and to bring the produce in the storing place.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "name",
+        "startDateTime",
+        "status",
+        "operations"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the task is identified by third parties."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short name of the task."
+        },
+        "startDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp of beginning the execution of the task."
+        },
+        "endDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp of the ending of execution the task."
+        },
+        "status": {
+          "type": "ref",
+          "ref": "#processStateType"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#operationDetails"
+          }
+        }
+      }
+    },
+    "taskDetails": {
+      "type": "object",
+      "description": "A Task is the execution of one or more Operation's by a ma-machine-system.\nA 'task' consists of one ore more 'operations' that are closely related but involve different assents and resources. All combined operations need to be carried out well coordinated, to execute the task.\nFor instance, the task potato harvesting involves: one tractor pulling the potato harvester, 2 units to take care of the transport of the harvested potatoes to the barn, equipment at the barn to unload the transport units and to bring the produce in the storing place.",
+      "required": [
+        "thirdPartyIds",
+        "name",
+        "startDateTime",
+        "status",
+        "operations"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the task is identified by third parties."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short name of the task."
+        },
+        "startDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp of beginning the execution of the task."
+        },
+        "endDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp of the ending of execution the task."
+        },
+        "status": {
+          "type": "ref",
+          "ref": "#processStateType"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#operationDetails"
+          }
+        }
+      }
+    },
+    "operationDetails": {
+      "type": "object",
+      "description": "Activity carried out by man and/or machine as part op the execution of a task. An operation performs a particular OperationTechnique on a particular asset (a crop,a field, a production unit, a batch, etc.) to realize a certain Cultural Practice or Husbandry Practice.\nExamples for CropProduction: The CulturalPractise \"weed control\"can be realized by one of various OperationTechniques like spraying, row cultivation, manual hoeing, etc.",
+      "required": [
+        "thirdPartyIds",
+        "name",
+        "startDateTime",
+        "status"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the operation is identified by third parties."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short name of the operation."
+        },
+        "startDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp of beginning the execution of the operation."
+        },
+        "endDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp of the ending of execution the operation."
+        },
+        "operationType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "The type of operation. Code list Id for arable farming: nl.agroconnect.cl127 (OpenAPI property name: 'type')"
+        },
+        "technique": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Examples for Crop Production: The CulturalPractise \\\"weed control\\\" can be realized by one of various OperationTechniques like spraying, row cultivation, manual hoeing, etc. \\r\\nCode list Id for arable farming: nl.cl127 (or nl.cl293)"
+        },
+        "status": {
+          "type": "ref",
+          "ref": "#processStateType"
+        },
+        "characteristics": {
+          "type": "array",
+          "description": "The option to attach one or more characteristics about the execution of this operation.",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "area": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The treated area (hectare, m2) during the execution of this operation. Can be a percentage of the total area or an absolute value (like hectare or square meter)."
+        },
+        "inputAllocations": {
+          "type": "array",
+          "description": "The option to attach one or more inputs used to execute this operation, such as crop protection products, fertilizer, water, energy, or labor.",
+          "items": {
+            "type": "ref",
+            "ref": "#inputAllocationDetails"
+          }
+        },
+        "outputAllocations": {
+          "type": "array",
+          "description": "The option to attach one or more outputs resulting from the execution of this operation, such as harvested produce or energy.",
+          "items": {
+            "type": "ref",
+            "ref": "#outputAllocationDetails"
+          }
+        },
+        "equipmentAssignments": {
+          "type": "array",
+          "description": "The option to attach one or more pieces of equipment used to execute this operation.",
+          "items": {
+            "type": "ref",
+            "ref": "#equipmentAssignment"
+          }
+        },
+        "workerAssignments": {
+          "type": "array",
+          "description": "The option to attach one or more workers assigned to execute this operation.",
+          "items": {
+            "type": "ref",
+            "ref": "#workAssignment"
+          }
+        }
+      }
+    },
+    "allocationDetails": {
+      "type": "object",
+      "description": "Details of the generic class (the parent) for input and output allocation.",
+      "required": [
+        "thirdPartyIds",
+        "allocationType",
+        "quantity",
+        "product"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the allocation is identified by third parties."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short name for this allocation."
+        },
+        "allocationType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.cl271 is used. (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the allocation measured in absolute terms, meaning for instance applied liters or kilogram in total for this allocation (so not in liter/hectare of kilogram/hectare)."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails",
+          "description": "Product used as allocation in this operation"
+        }
+      }
+    },
+    "inputAllocationDetails": {
+      "type": "object",
+      "description": "One or more inputs used to execute this operation.\nExamples of types of input are: crop protection products, fertilizer, water, energy, labor, etc.",
+      "required": [
+        "thirdPartyIds",
+        "allocationType",
+        "quantity",
+        "product",
+        "treatmentzone"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the allocation is identified by third parties."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short name for this allocation."
+        },
+        "allocationType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.cl271 is used. (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the allocation measured in absolute terms, meaning for instance applied liters or kilogram in total for this allocation (so not in liter/hectare of kilogram/hectare)."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails",
+          "description": "Product used as allocation in this operation"
+        },
+        "treatmentzone": {
+          "type": "ref",
+          "ref": "#treatmentZoneDetails"
+        }
+      }
+    },
+    "outputAllocationDetails": {
+      "type": "object",
+      "description": "One or more outputs as the result of the execution of the operation.\nFor example harvested produce: potatoes, onions, flowers, vegetables, etc.\nBut an output could also be for instance energy.",
+      "required": [
+        "thirdPartyIds",
+        "allocationType",
+        "quantity",
+        "product",
+        "treatmentzone"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the allocation is identified by third parties."
+        },
+        "name": {
+          "type": "string",
+          "description": "Short name for this allocation."
+        },
+        "allocationType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.cl271 is used. (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the allocation measured in absolute terms, meaning for instance applied liters or kilogram in total for this allocation (so not in liter/hectare of kilogram/hectare)."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails",
+          "description": "Product used as allocation in this operation"
+        },
+        "treatmentzone": {
+          "type": "ref",
+          "ref": "#treatmentZoneDetails"
+        }
+      }
+    },
+    "treatmentZoneDetails": {
+      "type": "object",
+      "description": "Part of the plot which is treated in an operation",
+      "required": [
+        "thirdPartyIds"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the treatment zone is identified by third parties."
+        },
+        "characteristics": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        },
+        "area": {
+          "type": "ref",
+          "ref": "#measureType"
+        }
+      }
+    },
+    "inboundDeliveryByGrower": {
+      "type": "object",
+      "description": "Materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound\ndelivery describes a certain amount of a certain product acquired by a grower through an order to\na supplier.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "dateOfDelivery",
+        "quantity",
+        "product",
+        "location",
+        "supplier"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the inbound delivery is identified by third parties."
+        },
+        "dateOfDelivery": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Date at which the product is delivered at the location of the grower (\"YYYY-MM-DD\")"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the product delivered to the grower."
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails"
+        },
+        "location": {
+          "type": "ref",
+          "ref": "#productionLocationDetails",
+          "description": "Identification of the production location of the grower at which the product is delivered"
+        },
+        "supplier": {
+          "type": "ref",
+          "ref": "#supplierDetails"
+        }
+      }
+    },
+    "inboundDeliveryBySupplier": {
+      "type": "object",
+      "description": "Materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound\ndelivery describes a certain amount of a certain product acquired by a grower through an order to\na supplier.",
+      "required": [
+        "primaryId",
+        "thirdPartyIds",
+        "dateOfDelivery",
+        "quantity",
+        "product",
+        "location"
+      ],
+      "properties": {
+        "primaryId": {
+          "type": "ref",
+          "ref": "#primaryIdType",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the inbound delivery is identified by third parties."
+        },
+        "dateOfDelivery": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Date at which the product is delivered at the location of the grower (\"YYYY-MM-DD\")"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the product delivered to the grower."
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails"
+        },
+        "location": {
+          "type": "ref",
+          "ref": "#productionLocationDetails",
+          "description": "Identification of the production location of the grower at which the product is delivered"
+        }
+      }
+    },
+    "inboundDeliveryDetailsGrower": {
+      "type": "object",
+      "description": "Details of the materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound\ndelivery describes a certain amount of a certain product acquired by a grower through an order to\na supplier.",
+      "required": [
+        "thirdPartyIds",
+        "dateOfDelivery",
+        "quantity",
+        "product",
+        "location",
+        "supplier"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the inbound delivery is identified by third parties."
+        },
+        "dateOfDelivery": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Date at which the product is delivered at the location of the grower (\"YYYY-MM-DD\")"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the product delivered to the grower."
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails"
+        },
+        "location": {
+          "type": "ref",
+          "ref": "#productionLocationDetails",
+          "description": "Identification of the production location of the grower at which the product is delivered"
+        },
+        "supplier": {
+          "type": "ref",
+          "ref": "#supplierDetails"
+        }
+      }
+    },
+    "inboundDeliveryDetails": {
+      "type": "object",
+      "description": "Details of materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound\ndelivery describes a certain amount of a certain product acquired by a grower through an order to\na supplier.",
+      "required": [
+        "thirdPartyIds",
+        "dateOfDelivery",
+        "quantity",
+        "product",
+        "location"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the inbound delivery is identified by third parties."
+        },
+        "dateOfDelivery": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Date at which the product is delivered at the location of the grower (\"YYYY-MM-DD\")"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Quantity of the product delivered to the grower."
+        },
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails"
+        },
+        "location": {
+          "type": "ref",
+          "ref": "#productionLocationDetails",
+          "description": "Identification of the production location of the grower at which the product is delivered"
+        }
+      }
+    },
+    "productDetails": {
+      "type": "object",
+      "description": "Details of a product delivered to a farmer, like any agricultural input, tool, or resource designed to support farming activities, such as seeds, fertilizers, animal feed or crop protection solutions.",
+      "required": [
+        "thirdPartyIds"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the product is identified by third parties, e.g. GS1 GTIN, CGTB authorisation number, article code'"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product"
+        },
+        "additionalProductProperties": {
+          "type": "array",
+          "description": "List of additional product characteristics",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "equipmentDetail": {
+      "type": "object",
+      "description": "Details of equipment used to support farming activities, such as tractors, implements, sensor systems, installations, or hand tools.",
+      "required": [
+        "thirdPartyIds",
+        "equipmentType"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the equipment is identified by third parties, e.g. GS1 GTIN, CGTB authorisation number, article code'"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the equipment"
+        },
+        "equipmentType": {
+          "type": "string",
+          "description": "Type of equipment (OpenAPI property name: 'type')",
+          "knownValues": [
+            "Tractor",
+            "Implement",
+            "Sensorsystem",
+            "Installation",
+            "Handtool"
+          ]
+        }
+      }
+    },
+    "equipmentAssignment": {
+      "type": "object",
+      "description": "Identifies a piece of equipment that is used in a certain operation, and the period and usage figures of that use.",
+      "required": [
+        "equipment",
+        "startDateTime",
+        "endDateTime"
+      ],
+      "properties": {
+        "equipment": {
+          "type": "ref",
+          "ref": "#equipmentDetail",
+          "description": "The equipment assigned to and used in the operation."
+        },
+        "startDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp the equipment started being used in the operation."
+        },
+        "endDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp the equipment stopped being used in the operation."
+        },
+        "time": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The total time the equipment was in use during the operation (e.g. working hours or engine hours)."
+        },
+        "coveredDistance": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The total distance covered by the equipment during the operation."
+        }
+      }
+    },
+    "worker": {
+      "type": "object",
+      "description": "A person that performs (part of) an operation, e.g. a farm employee or contractor.",
+      "required": [
+        "workerId",
+        "name"
+      ],
+      "properties": {
+        "workerId": {
+          "type": "ref",
+          "ref": "#idType",
+          "description": "Identifier of the worker. (OpenAPI property name: 'id')"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the worker."
+        },
+        "phoneNumber": {
+          "type": "string",
+          "description": "Phone number of the worker."
+        },
+        "email": {
+          "type": "string",
+          "description": "E-mail address of the worker."
+        },
+        "jobTitle": {
+          "type": "string",
+          "description": "Job title of the worker."
+        }
+      }
+    },
+    "workAssignment": {
+      "type": "object",
+      "description": "Identifies a worker that is assigned to a certain operation, and the period and execution time of that assignment.",
+      "required": [
+        "worker",
+        "startDateTime",
+        "endDateTime"
+      ],
+      "properties": {
+        "worker": {
+          "type": "ref",
+          "ref": "#worker",
+          "description": "The worker assigned to the operation."
+        },
+        "startDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp the worker started working on the operation."
+        },
+        "endDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "The date/timestamp the worker stopped working on the operation."
+        },
+        "executionTime": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "The total time the worker spent executing the operation."
+        }
+      }
+    },
+    "jsonPatchOperation": {
+      "type": "object",
+      "description": "One RFC 6902 JSON Patch operation. 'value' is required for add, replace and test; 'from' is required for move and copy.",
+      "required": [
+        "op",
+        "path"
+      ],
+      "properties": {
+        "op": {
+          "type": "string",
+          "knownValues": [
+            "add",
+            "remove",
+            "replace",
+            "move",
+            "copy",
+            "test"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "from": {
+          "type": "string"
+        },
+        "value": {
+          "type": "unknown"
+        }
+      }
+    }
+  }
+}

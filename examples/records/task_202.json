@@ -1,0 +1,91 @@
+{
+  "$type": "nl.agroconnect.ecrop.task",
+  "thirdPartyIds": [
+    {
+      "content": "27575",
+      "schemeId": "com.my-mps.codelist.registratienummer"
+    }
+  ],
+  "name": "Spraying task",
+  "startDateTime": "2025-03-12T15:51:00+01:00",
+  "endDateTime": "2025-03-12T16:45:00+01:00",
+  "status": "COMPLETED",
+  "operations": [
+    {
+      "thirdPartyIds": [
+        {
+          "content": "27575-1",
+          "schemeId": "MPS"
+        }
+      ],
+      "name": "Spraying operation",
+      "startDateTime": "2025-03-12T15:51:00+01:00",
+      "endDateTime": "2025-03-12T16:45:00+01:00",
+      "operationType": {
+        "content": "SPRAYING",
+        "listId": "nl.agroconnect.codelist.cl127"
+      },
+      "technique": {
+        "content": "SPRAYING",
+        "listId": "nl.agroconnect.codelist.cl302"
+      },
+      "status": "COMPLETED",
+      "area": {
+        "scaleFactor": 0,
+        "content": 25000,
+        "unitCode": {
+          "content": "MTK",
+          "listId": "nl.agroconnect.codelist.cl020"
+        }
+      },
+      "inputAllocations": [
+        {
+          "thirdPartyIds": [
+            {
+              "content": "52521785",
+              "schemeId": "com.my-mps.codelist.registratienummer"
+            }
+          ],
+          "name": "Movento",
+          "allocationType": {
+            "content": "PROTEC",
+            "listId": "nl.agroconnect.codelist.cl127"
+          },
+          "quantity": {
+            "scaleFactor": 0,
+            "content": 1200,
+            "unitCode": {
+              "content": "KGM",
+              "listId": "nl.agroconnect.codelist.cl020"
+            }
+          },
+          "product": {
+            "thirdPartyIds": [
+              {
+                "content": "838439 N",
+                "schemeId": "nl.ctgb.codelist.toelatingsnummer"
+              }
+            ],
+            "name": "Movento 100 SC - 1L - spirotetramat"
+          },
+          "treatmentzone": {
+            "thirdPartyIds": [
+              {
+                "content": "PAD-1-99",
+                "schemeId": "com.my-mps.codelist.padnummers"
+              }
+            ],
+            "area": {
+              "scaleFactor": 0,
+              "content": 23500,
+              "unitCode": {
+                "content": "MTK",
+                "listId": "nl.agroconnect.codelist.cl020"
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

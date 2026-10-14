@@ -1,0 +1,28 @@
+{
+  "$type": "nl.agroconnect.ecrop.supplier",
+  "thirdPartyIds": [
+    {
+      "content": "06448281",
+      "schemeId": "nl.kvk.codelist.kvknummer"
+    },
+    {
+      "content": "870066561253",
+      "schemeId": "com.gs1.codelist.gln"
+    }
+  ],
+  "name": "Van Iperen",
+  "phoneNumber": "+31(0)74 6521300",
+  "emailAddress": "info@iperen.com",
+  "websiteUrl": "www.iperen.com",
+  "visitorsAddress": {
+    "postalCode": "3273 LK",
+    "cityName": "Westmaas",
+    "streetName": "Smidsweg",
+    "streetNumber": "24",
+    "country": {
+      "content": "NL",
+      "listId": "iso.3166-1.alpha2"
+    },
+    "countryName": "Netherlands"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$type": "nl.agroconnect.ecrop.productionLocation",
+  "thirdPartyIds": [
+    {
+      "content": "8700778121125",
+      "schemeId": "com.gs1.codelist.gln"
+    }
+  ],
+  "name": "Kas 1",
+  "visitorsAddress": {
+    "postalCode": "2675 SJ",
+    "cityName": "Honselersdijk",
+    "streetName": "Gantellaan",
+    "streetNumber": "8",
+    "country": {
+      "content": "NL",
+      "listId": "iso.3166-1.alpha2"
+    },
+    "countryName": "Netherlands"
+  }
+}

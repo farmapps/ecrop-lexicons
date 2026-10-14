@@ -1,0 +1,85 @@
+{
+  "$type": "nl.agroconnect.ecrop.plotFeature",
+  "geoJsonType": "Feature",
+  "featureId": "384912567",
+  "geometry": {
+    "$type": "nl.agroconnect.ecrop.geo.defs#polygonType",
+    "scaleFactor": -4,
+    "geoJsonType": "Polygon",
+    "coordinates": [
+      {
+        "positions": [
+          {
+            "x": 57519,
+            "y": 519485
+          },
+          {
+            "x": 57811,
+            "y": 519485
+          },
+          {
+            "x": 57811,
+            "y": 519665
+          },
+          {
+            "x": 57519,
+            "y": 519665
+          },
+          {
+            "x": 57519,
+            "y": 519485
+          }
+        ]
+      }
+    ]
+  },
+  "properties": {
+    "plotId": {
+      "content": "e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "schemeId": "com.my-mps.codelist.guid"
+    },
+    "name": "Tuin1, perceel6",
+    "area": {
+      "scaleFactor": 0,
+      "content": 6000,
+      "unitCode": {
+        "content": "MTK",
+        "listId": "nl.agroconnect.codelist.cl020"
+      }
+    },
+    "entryPoint": {
+      "scaleFactor": -4,
+      "geoJsonType": "Point",
+      "coordinates": {
+        "x": 57527,
+        "y": 519487
+      }
+    },
+    "abLine": {
+      "scaleFactor": -4,
+      "geoJsonType": "LineString",
+      "coordinates": [
+        {
+          "x": 57548,
+          "y": 519494
+        },
+        {
+          "x": 57782,
+          "y": 519655
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "href": "https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items/384912567",
+      "rel": "self",
+      "mediaType": "application/geo+json"
+    },
+    {
+      "href": "https://standard-api.agroconnect.nl/ecrop/v1/growers/com.my-mps.codelist.guid/e3c8a1b2-4f6e-4a2d-8e3b-9c1d2e3f4a5b/plots/com.my-mps.codelist.guid/e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "rel": "https://ecrop.agroconnect.nl/rel/plot",
+      "mediaType": "application/json"
+    }
+  ]
+}

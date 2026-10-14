@@ -1,0 +1,582 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.geo.defs",
+  "description": "Geo (GeoJSON / JSON-FG / OGC API Features) types of the AgroConnect eCrop API 1.1.0.",
+  "defs": {
+    "coordRefSysType": {
+      "type": "string",
+      "description": "URI of the coordinate reference system (CRS), conform OGC CRS-URI convention.",
+      "format": "uri"
+    },
+    "jsonFgTimeType": {
+      "type": "object",
+      "description": "JSON-FG time: an instant (date or timestamp) and/or an interval.",
+      "properties": {
+        "date": {
+          "type": "ref",
+          "ref": "nl.agroconnect.ecrop.defs#dateType"
+        },
+        "timestamp": {
+          "type": "ref",
+          "ref": "nl.agroconnect.ecrop.defs#dateTimeType"
+        },
+        "interval": {
+          "type": "ref",
+          "ref": "#timeIntervalType"
+        }
+      }
+    },
+    "positionType": {
+      "type": "object",
+      "description": "A position (GeoJSON [x, y] or [x, y, z]) as integers. The order and meaning of the axes depend on the CRS (CRS84: x=lon, y=lat; EPSG:28992: x, y in meters). The real coordinate value is value * 10^scaleFactor, where scaleFactor is set on the enclosing geometry.",
+      "required": [
+        "x",
+        "y"
+      ],
+      "properties": {
+        "x": {
+          "type": "integer",
+          "description": "First axis, scaled by scaleFactor of the geometry."
+        },
+        "y": {
+          "type": "integer",
+          "description": "Second axis, scaled by scaleFactor of the geometry."
+        },
+        "z": {
+          "type": "integer",
+          "description": "Optional third axis, scaled by scaleFactor of the geometry."
+        }
+      }
+    },
+    "pointType": {
+      "type": "object",
+      "description": "GeoJSON Point.",
+      "required": [
+        "geoJsonType",
+        "scaleFactor",
+        "coordinates"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "Point",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25. Applies to every coordinate of this geometry, e.g. -7 for CRS84 degrees."
+        },
+        "coordinates": {
+          "type": "ref",
+          "ref": "#positionType"
+        }
+      }
+    },
+    "lineStringType": {
+      "type": "object",
+      "description": "GeoJSON LineString.",
+      "required": [
+        "geoJsonType",
+        "scaleFactor",
+        "coordinates"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "LineString",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25. Applies to every coordinate of this geometry, e.g. -7 for CRS84 degrees."
+        },
+        "coordinates": {
+          "type": "array",
+          "minLength": 2,
+          "items": {
+            "type": "ref",
+            "ref": "#positionType"
+          }
+        }
+      }
+    },
+    "polygonType": {
+      "type": "object",
+      "description": "GeoJSON Polygon. The first ring is the exterior boundary (counterclockwise), every following ring is a hole (clockwise).",
+      "required": [
+        "geoJsonType",
+        "scaleFactor",
+        "coordinates"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "Polygon",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25. Applies to every coordinate of this geometry, e.g. -7 for CRS84 degrees."
+        },
+        "coordinates": {
+          "type": "array",
+          "minLength": 1,
+          "items": {
+            "type": "ref",
+            "ref": "#linearRingType"
+          }
+        }
+      }
+    },
+    "multiPolygonType": {
+      "type": "object",
+      "description": "GeoJSON MultiPolygon.",
+      "required": [
+        "geoJsonType",
+        "scaleFactor",
+        "coordinates"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "MultiPolygon",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25. Applies to every coordinate of this geometry, e.g. -7 for CRS84 degrees."
+        },
+        "coordinates": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#polygonCoordinatesType"
+          }
+        }
+      }
+    },
+    "landingPage": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#link"
+          }
+        }
+      }
+    },
+    "conformanceDeclaration": {
+      "type": "object",
+      "description": "List of conformance classes implemented by this API, per OGC API - Features - Part 1: Core, Requirement /req/core/conformance-success.",
+      "required": [
+        "conformsTo"
+      ],
+      "properties": {
+        "conformsTo": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "collectionExtentType": {
+      "type": "object",
+      "properties": {
+        "spatial": {
+          "type": "object",
+          "properties": {
+            "bbox": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#bboxType"
+              }
+            },
+            "crs": {
+              "type": "string",
+              "format": "uri",
+              "default": "http://www.opengis.net/def/crs/OGC/1.3/CRS84"
+            }
+          }
+        },
+        "temporal": {
+          "type": "object",
+          "properties": {
+            "interval": {
+              "type": "array",
+              "items": {
+                "type": "ref",
+                "ref": "#timeIntervalType"
+              }
+            },
+            "trs": {
+              "type": "string",
+              "format": "uri",
+              "default": "http://www.opengis.net/def/crs/OGC/0/GregorianDateTime"
+            }
+          }
+        }
+      }
+    },
+    "collection": {
+      "type": "object",
+      "required": [
+        "collectionId"
+      ],
+      "properties": {
+        "collectionId": {
+          "type": "string",
+          "description": "(OpenAPI property name: 'id')"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "itemType": {
+          "type": "string",
+          "default": "feature"
+        },
+        "crs": {
+          "type": "array",
+          "description": "CRSs supported for this collection when requested via the crs query parameter.",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "storageCrs": {
+          "type": "ref",
+          "ref": "#coordRefSysType",
+          "description": "The native CRS in which the geometry of this collection is stored."
+        },
+        "extent": {
+          "type": "ref",
+          "ref": "#collectionExtentType"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#link"
+          }
+        }
+      }
+    },
+    "collections": {
+      "type": "object",
+      "required": [
+        "collections"
+      ],
+      "properties": {
+        "collections": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#collection"
+          }
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#link"
+          }
+        }
+      }
+    },
+    "plotFeatureProperties": {
+      "type": "object",
+      "description": "The \"properties\" member shared by PlotFeatureTopLevel and PlotFeature: essential plot business attributes (plotId, name, area) plus the flat entryPoint and abLine geometries (no place/geometry wrapper, since properties is opaque to JSON-FG-only readers).",
+      "properties": {
+        "plotId": {
+          "type": "ref",
+          "ref": "nl.agroconnect.ecrop.defs#primaryIdType",
+          "description": "The id of the plot this feature belongs to. This is the only reference between plot and feature that is stored: the plot finds its feature(s) through a query on this property (see the plotSchemeId and plotId query parameters of GET /collections/plots/items)."
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the plot."
+        },
+        "area": {
+          "type": "ref",
+          "ref": "nl.agroconnect.ecrop.defs#measureType",
+          "description": "The surface (measured in for instance square meters, hectare) of this production plot."
+        },
+        "entryPoint": {
+          "type": "ref",
+          "ref": "#pointType",
+          "description": "Flat GeoJSON geometry (no place/geometry wrapper) describing the entry point of the plot. Coordinates follow the coordRefSys of this feature under profile=jsonfg, or WGS84 under profile=rfc7946."
+        },
+        "abLine": {
+          "type": "ref",
+          "ref": "#lineStringType",
+          "description": "Flat GeoJSON geometry (no place/geometry wrapper) describing the AB reference line of the plot. Coordinates follow the coordRefSys of this feature under profile=jsonfg, or WGS84 under profile=rfc7946."
+        }
+      }
+    },
+    "plotFeatureTopLevel": {
+      "type": "object",
+      "required": [
+        "geoJsonType",
+        "geometry",
+        "properties"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "Feature",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "featureId": {
+          "type": "string",
+          "description": "Feature id (a number id is represented as its decimal string). (OpenAPI property name: 'id')"
+        },
+        "conformsTo": {
+          "type": "array",
+          "description": "JSON-FG conformance classes implemented by this document. Required when profile=jsonfg is used",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "coordRefSys": {
+          "type": "ref",
+          "ref": "#coordRefSysType"
+        },
+        "time": {
+          "type": "ref",
+          "ref": "#jsonFgTimeType"
+        },
+        "place": {
+          "type": "union",
+          "description": "Geometry (JSON FG) of the plot (Polygon or MultiPolygon) using the CRS described in coordRefSys. Only applicable for profile=jsonfg. Should not be used for WGS84 coordinates (use geometry in stead) Plot geometry types: Polygon or MultiPolygon.",
+          "refs": [
+            "#polygonType",
+            "#multiPolygonType"
+          ],
+          "closed": true
+        },
+        "geometry": {
+          "type": "union",
+          "description": "Optional WGS84 fallback geometry (plain GeoJSON) for consumers that support GeoJSON but not JSON-FG. Null when not provided. Constrained to the same geometry types as \"place\" in this schema. Since this field is required, it is nullable in case WGS84 is nog relevant Plot geometry types: Polygon or MultiPolygon.",
+          "refs": [
+            "#polygonType",
+            "#multiPolygonType"
+          ],
+          "closed": true
+        },
+        "featureType": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Feature type(s); a single type is a one element array."
+        },
+        "properties": {
+          "type": "ref",
+          "ref": "#plotFeatureProperties"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#link"
+          }
+        }
+      },
+      "nullable": [
+        "geometry"
+      ]
+    },
+    "plotFeature": {
+      "type": "object",
+      "required": [
+        "geoJsonType",
+        "geometry",
+        "properties"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "Feature",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "featureId": {
+          "type": "string",
+          "description": "Feature id (a number id is represented as its decimal string). (OpenAPI property name: 'id')"
+        },
+        "time": {
+          "type": "ref",
+          "ref": "#jsonFgTimeType"
+        },
+        "place": {
+          "type": "union",
+          "description": "Geometry (JSON FG) of the plot (Polygon or MultiPolygon) using the CRS described in coordRefSys. Only applicable for profile=jsonfg. Should not be used for WGS84 coordinates (use geometry in stead) Plot geometry types: Polygon or MultiPolygon.",
+          "refs": [
+            "#polygonType",
+            "#multiPolygonType"
+          ],
+          "closed": true
+        },
+        "geometry": {
+          "type": "union",
+          "description": "Optional WGS84 fallback geometry (plain GeoJSON) for consumers that support GeoJSON but not JSON-FG. Null when not provided. Constrained to the same geometry types as \"place\" in this schema. Since this field is required, it is nullable in case WGS84 is nog relevant Plot geometry types: Polygon or MultiPolygon.",
+          "refs": [
+            "#polygonType",
+            "#multiPolygonType"
+          ],
+          "closed": true
+        },
+        "properties": {
+          "type": "ref",
+          "ref": "#plotFeatureProperties"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#link"
+          }
+        }
+      },
+      "nullable": [
+        "geometry"
+      ]
+    },
+    "plotFeatureCollection": {
+      "type": "object",
+      "required": [
+        "geoJsonType",
+        "features"
+      ],
+      "properties": {
+        "geoJsonType": {
+          "type": "string",
+          "const": "FeatureCollection",
+          "description": "(OpenAPI property name: 'type')"
+        },
+        "conformsTo": {
+          "type": "array",
+          "description": "JSON-FG conformance classes implemented by this document. Required when profile=jsonfg is used",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "coordRefSys": {
+          "type": "ref",
+          "ref": "#coordRefSysType"
+        },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "#plotFeature"
+          }
+        },
+        "numberMatched": {
+          "type": "integer"
+        },
+        "numberReturned": {
+          "type": "integer"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#link"
+          }
+        },
+        "featureType": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Feature type(s); a single type is a one element array."
+        }
+      }
+    },
+    "linearRingType": {
+      "type": "object",
+      "description": "A closed LineString with four or more positions; the first and last position are identical.",
+      "required": [
+        "positions"
+      ],
+      "properties": {
+        "positions": {
+          "type": "array",
+          "minLength": 4,
+          "items": {
+            "type": "ref",
+            "ref": "#positionType"
+          }
+        }
+      }
+    },
+    "polygonCoordinatesType": {
+      "type": "object",
+      "description": "The rings of one polygon of a MultiPolygon: exterior ring first, then the holes.",
+      "required": [
+        "rings"
+      ],
+      "properties": {
+        "rings": {
+          "type": "array",
+          "minLength": 1,
+          "items": {
+            "type": "ref",
+            "ref": "#linearRingType"
+          }
+        }
+      }
+    },
+    "bboxType": {
+      "type": "object",
+      "description": "Bounding box [minx, miny, maxx, maxy] or [minx, miny, minz, maxx, maxy, maxz] as integers; real value = value * 10^scaleFactor.",
+      "required": [
+        "values",
+        "scaleFactor"
+      ],
+      "properties": {
+        "values": {
+          "type": "array",
+          "minLength": 4,
+          "maxLength": 6,
+          "items": {
+            "type": "integer"
+          }
+        },
+        "scaleFactor": {
+          "type": "integer",
+          "description": "Power of 10 exponent to apply to the integer value(s) of this object: realValue = value * 10^scaleFactor. E.g. value 125 with scaleFactor -2 is 1.25."
+        }
+      }
+    },
+    "timeIntervalType": {
+      "type": "object",
+      "description": "Time interval; an absent start or end means the interval is open at that side (null in the OpenAPI [start, end] array).",
+      "properties": {
+        "start": {
+          "type": "string",
+          "description": "Date or datetime of the start of the interval."
+        },
+        "end": {
+          "type": "string",
+          "description": "Date or datetime of the end of the interval."
+        }
+      }
+    }
+  }
+}

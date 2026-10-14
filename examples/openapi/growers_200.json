@@ -1,0 +1,45 @@
+[
+  {
+    "id": {
+      "content": "e3c8a1b2-4f6e-4a2d-8e3b-9c1d2e3f4a5b",
+      "schemeId": "com.my-mps.codelist.guid"
+    },
+    "thirdPartyIds": [
+      {
+        "content": "09123559",
+        "schemeId": "nl.kvk.codelist.kvknummer"
+      },
+      {
+        "content": "870012388392",
+        "schemeId": "com.gs1.codelist.gln"
+      }
+    ],
+    "name": "Kwekerij De Lier",
+    "personName": "J. de Lier",
+    "phoneNumber": "+31(0)74 26653244",
+    "emailAddress": "info@delier.nl",
+    "iban": "NL04ABNA0667352669",
+    "websiteUrl": "www.delier.nl",
+    "postalAddress": {
+      "postalCode": "3521 AA",
+      "cityName": "Naaldwijk",
+      "country": {
+        "content": "NL",
+        "listId": "iso.3166-1.alpha2"
+      },
+      "countryName": "Netherlands",
+      "postalBoxId": "4411"
+    },
+    "visitorsAddress": {
+      "postalCode": "3521 AN",
+      "cityName": "Naaldwijk",
+      "streetName": "Broekweg",
+      "streetNumber": "12",
+      "country": {
+        "content": "NL",
+        "listId": "iso.3166-1.alpha2"
+      },
+      "countryName": "Netherlands"
+    }
+  }
+]

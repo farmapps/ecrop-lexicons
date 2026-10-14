@@ -1,0 +1,106 @@
+{
+  "$type": "nl.agroconnect.ecrop.plotFeature",
+  "geoJsonType": "Feature",
+  "featureId": "384912567",
+  "conformsTo": [
+    "http://www.opengis.net/spec/json-fg-1/1.0/conf/core",
+    "http://www.opengis.net/spec/json-fg-1/1.0/conf/types-schemas"
+  ],
+  "coordRefSys": "http://www.opengis.net/def/crs/EPSG/0/28992",
+  "time": {
+    "interval": {
+      "start": "2024-01-12",
+      "end": "2024-12-14"
+    }
+  },
+  "place": {
+    "$type": "nl.agroconnect.ecrop.geo.defs#polygonType",
+    "scaleFactor": 0,
+    "geoJsonType": "Polygon",
+    "coordinates": [
+      {
+        "positions": [
+          {
+            "x": 180000,
+            "y": 440000
+          },
+          {
+            "x": 182000,
+            "y": 440000
+          },
+          {
+            "x": 182000,
+            "y": 442000
+          },
+          {
+            "x": 180000,
+            "y": 442000
+          },
+          {
+            "x": 180000,
+            "y": 440000
+          }
+        ]
+      }
+    ]
+  },
+  "geometry": null,
+  "featureType": [
+    "agroconnect:ecrop:plot"
+  ],
+  "properties": {
+    "plotId": {
+      "content": "e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "schemeId": "com.my-mps.codelist.guid"
+    },
+    "name": "Tuin1, perceel6",
+    "area": {
+      "scaleFactor": 0,
+      "content": 6000,
+      "unitCode": {
+        "content": "MTK",
+        "listId": "nl.agroconnect.codelist.cl020"
+      }
+    },
+    "entryPoint": {
+      "scaleFactor": 0,
+      "geoJsonType": "Point",
+      "coordinates": {
+        "x": 180050,
+        "y": 440020
+      }
+    },
+    "abLine": {
+      "scaleFactor": 0,
+      "geoJsonType": "LineString",
+      "coordinates": [
+        {
+          "x": 180200,
+          "y": 440100
+        },
+        {
+          "x": 181800,
+          "y": 441900
+        }
+      ]
+    }
+  },
+  "links": [
+    {
+      "href": "https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items/384912567?profile=jsonfg",
+      "rel": "self",
+      "mediaType": "application/geo+json"
+    },
+    {
+      "href": "https://standard-api.agroconnect.nl/plot-features/v1/collections/plots",
+      "rel": "collection",
+      "mediaType": "application/json"
+    },
+    {
+      "href": "https://standard-api.agroconnect.nl/ecrop/v1/growers/com.my-mps.codelist.guid/e3c8a1b2-4f6e-4a2d-8e3b-9c1d2e3f4a5b/plots/com.my-mps.codelist.guid/e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "rel": "https://ecrop.agroconnect.nl/rel/plot",
+      "mediaType": "application/json",
+      "title": "Bijbehorend Plot business-object"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "$type": "nl.agroconnect.ecrop.inboundDeliveryByGrower",
+  "thirdPartyIds": [
+    {
+      "content": "73882921",
+      "schemeId": "com.iperen.codelist.orderregelnummer"
+    }
+  ],
+  "dateOfDelivery": "2025-03-08",
+  "quantity": {
+    "scaleFactor": 0,
+    "content": 1,
+    "unitCode": {
+      "content": "l",
+      "listId": "nl.agroconnect.codelist.cl020"
+    }
+  },
+  "product": {
+    "thirdPartyIds": [
+      {
+        "content": "2435",
+        "schemeId": "com.iperen.codelist.artikelnummer"
+      },
+      {
+        "content": "8700991172001",
+        "schemeId": "nl.gs1.gtin"
+      },
+      {
+        "content": "838439 N",
+        "schemeId": "nl.ctgb.codelist.toelatingsnummer"
+      }
+    ],
+    "name": "Movento 100 SC - 1L - spirotetramat"
+  },
+  "location": {
+    "thirdPartyIds": [
+      {
+        "content": "1",
+        "schemeId": "com.iperen.codelist.cl030"
+      }
+    ],
+    "name": "De Tuinderij Honselersdijk"
+  },
+  "supplier": {
+    "thirdPartyIds": [
+      {
+        "content": "0125948",
+        "schemeId": "nl.kvk.codelist.kvknummer"
+      }
+    ],
+    "name": "Van Iperen"
+  }
+}

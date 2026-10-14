@@ -1,0 +1,76 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.plot",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "Details of the Surface (area) that is used to grow plants.\nThe exact location of this surface is specified by either, a greenhouse-location a point location or a border location (using outer and inner polygons).",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "thirdPartyIds",
+          "name",
+          "plotType",
+          "area"
+        ],
+        "properties": {
+          "thirdPartyIds": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "The start data of the existence of the asset."
+          },
+          "endDate": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "The end data of the existence of the asset."
+          },
+          "characteristics": {
+            "type": "array",
+            "items": {
+              "type": "ref",
+              "ref": "nl.agroconnect.ecrop.defs#characteristicType"
+            }
+          },
+          "plotType": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#plotType",
+            "description": "(OpenAPI property name: 'type')"
+          },
+          "area": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#measureType",
+            "description": "The surface (measured in for instance square meters, hectare) of this production plot."
+          },
+          "regularOrOrganic": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Indicates whether this plot is classified for organic production or not.\nProduction protocol: indicates whether this plot is classified  for organic production or not.\nCode list: nl.cl015"
+          },
+          "localSoilType": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Code for the soil type, as used for a specific use case.\nLocalSoilType code consists of the reference to the code list that is being used plus the code from this code list.\nFor eCrop in arable farming in The Netherlands, code list nl.cl405 is used"
+          },
+          "regulatorySoilType": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\nFor eCrop in The Netherlands code list nl.cl405 is used."
+          },
+          "greenhouseLocation": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#greenhouseLocationDetails"
+          }
+        }
+      }
+    }
+  }
+}

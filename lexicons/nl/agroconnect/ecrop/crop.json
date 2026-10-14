@@ -1,0 +1,117 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.crop",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "The details of the cultivation of a specific crop type (e.g. potato, wheat, rice,. etc.) on one or more plots during a specific period of time, specified by startDateTime and endDateTime.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "thirdPartyIds",
+          "name",
+          "year",
+          "plantSpecies"
+        ],
+        "properties": {
+          "thirdPartyIds": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the asset is identified by third parties"
+          },
+          "name": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "The start data of the existence of the asset."
+          },
+          "endDate": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "The end data of the existence of the asset."
+          },
+          "characteristics": {
+            "type": "array",
+            "items": {
+              "type": "ref",
+              "ref": "nl.agroconnect.ecrop.defs#characteristicType"
+            }
+          },
+          "year": {
+            "type": "integer",
+            "description": "Indication of the year in which the cultivation is harvested."
+          },
+          "country": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#countryCodeType",
+            "description": "Country where crop is grown. Code list: ISO country code: 2 letter ISO-3166."
+          },
+          "region": {
+            "type": "string",
+            "description": "Region of a country the cultivation took place.\\nFor eCrop in The Netherlands for this code list code list nl.cl044 is used."
+          },
+          "useTitle": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Code to indicate the type of legal ownership of the field that is used for the crop. For eCrop in The Netherlands code list nl.cl412 is used for this"
+          },
+          "productionType": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Indicates the intensity of growing the crop. In The Netherlands used to report to the MLNV-RVO authority. Code list: nl.cl255"
+          },
+          "productionPurpose": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Indicator of the produce purpose the crop. For instance: fresh marked, animal feed, seed production, etc. Code list: nl.cl251"
+          },
+          "productionSequence": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#productionSequenceType"
+          },
+          "regularOrOrganic": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Production protocol: indicates whether this crop is classified as grown organic or non-organic. Code list: nl.cl015"
+          },
+          "netArea": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#measureType",
+            "description": "The net (netto) area (in m2, hectare, etc.) of the surface that is used for growing the crop."
+          },
+          "growEnvironment": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Indicates in what type of environment the crop is grown; e.g. in the open air, in a greenhouse, etc. Code list: nl.cl299"
+          },
+          "growMedium": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "Indicates in what medium the crop is rooted; for instance in soil, in substrate, on bark, etc. Code list: nl.cl300"
+          },
+          "trackTillage": {
+            "type": "boolean",
+            "description": "Indicates whether the cultivation, over the years, is done in fixed lanes with fixed tracks for machinery.\\n\\ntrue = track tillage is applied\\nfalse = track tillage is not applied"
+          },
+          "plantSpecies": {
+            "type": "array",
+            "items": {
+              "type": "ref",
+              "ref": "nl.agroconnect.ecrop.defs#plantSpecies"
+            }
+          },
+          "plots": {
+            "type": "array",
+            "items": {
+              "type": "ref",
+              "ref": "nl.agroconnect.ecrop.defs#plot"
+            }
+          }
+        }
+      }
+    }
+  }
+}

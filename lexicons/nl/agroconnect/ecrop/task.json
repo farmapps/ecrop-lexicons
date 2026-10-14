@@ -1,0 +1,53 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.task",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "A Task is the execution of one or more Operation's by a ma-machine-system.\nA 'task' consists of one ore more 'operations' that are closely related but involve different assents and resources. All combined operations need to be carried out well coordinated, to execute the task.\nFor instance, the task potato harvesting involves: one tractor pulling the potato harvester, 2 units to take care of the transport of the harvested potatoes to the barn, equipment at the barn to unload the transport units and to bring the produce in the storing place.",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "thirdPartyIds",
+          "name",
+          "startDateTime",
+          "status",
+          "operations"
+        ],
+        "properties": {
+          "thirdPartyIds": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the task is identified by third parties."
+          },
+          "name": {
+            "type": "string",
+            "description": "Short name of the task."
+          },
+          "startDateTime": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateTimeType",
+            "description": "The date/timestamp of beginning the execution of the task."
+          },
+          "endDateTime": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateTimeType",
+            "description": "The date/timestamp of the ending of execution the task."
+          },
+          "status": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#processStateType"
+          },
+          "operations": {
+            "type": "array",
+            "items": {
+              "type": "ref",
+              "ref": "nl.agroconnect.ecrop.defs#operationDetails"
+            }
+          }
+        }
+      }
+    }
+  }
+}

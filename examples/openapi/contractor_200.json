@@ -1,0 +1,27 @@
+{
+  "id": {
+    "content": "5d4e3f2a-1b0c-9d8e-7f6a-5b4c3d2e1f0a",
+    "schemeId": "com.my-mps.codelist.guid"
+  },
+  "thirdPartyIds": [
+    {
+      "content": "24138967",
+      "schemeId": "nl.kvk.codelist.kvknummer"
+    }
+  ],
+  "name": "Loonbedrijf De Groot",
+  "phoneNumber": "+31(0)168 412233",
+  "emailAddress": "info@loonbedrijfdegroot.nl",
+  "websiteUrl": "www.loonbedrijfdegroot.nl",
+  "visitorsAddress": {
+    "postalCode": "4691 CB",
+    "cityName": "Terneuzen",
+    "streetName": "Industrieweg",
+    "streetNumber": "8",
+    "country": {
+      "content": "NL",
+      "listId": "iso.3166-1.alpha2"
+    },
+    "countryName": "Netherlands"
+  }
+}

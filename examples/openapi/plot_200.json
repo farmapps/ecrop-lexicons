@@ -1,0 +1,43 @@
+{
+  "id": {
+    "content": "e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+    "schemeId": "com.my-mps.codelist.guid"
+  },
+  "thirdPartyIds": [
+    {
+      "content": "A342_1_6",
+      "schemeId": "com.my-mps.codelist.kasnummer"
+    }
+  ],
+  "name": "Tuin1, perceel6",
+  "startDate": "2024-01-12",
+  "endDate": "2024-12-14",
+  "type": "CROPFIELD",
+  "area": {
+    "content": 6000,
+    "unitCode": {
+      "content": "MTK",
+      "listId": "nl.agroconnect.codelist.cl020"
+    }
+  },
+  "regularOrOrganic": {
+    "content": "REGULAR",
+    "listId": "nl.agroconnect.codelist.cl015"
+  },
+  "localSoilType": {
+    "content": "CLAY",
+    "listId": "nl.agroconnect.codelist.cl405"
+  },
+  "regulatorySoilType": {
+    "content": "CLAY",
+    "listId": "nl.agroconnect.codelist.cl405"
+  },
+  "links": [
+    {
+      "rel": "https://ecrop.agroconnect.nl/rel/plot-features",
+      "href": "https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items?plotSchemeId=com.my-mps.codelist.guid&plotId=e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "type": "application/geo+json",
+      "title": "Features (boundary, entryPoint, abLine) that refer to this plot, as OGC features"
+    }
+  ]
+}

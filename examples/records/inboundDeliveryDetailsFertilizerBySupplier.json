@@ -1,0 +1,84 @@
+{
+  "$type": "nl.agroconnect.ecrop.inboundDeliveryBySupplier",
+  "thirdPartyIds": [
+    {
+      "content": "84037601",
+      "schemeId": "com.iperen.codelist.orderregelnummer"
+    }
+  ],
+  "dateOfDelivery": "2025-01-23",
+  "quantity": {
+    "scaleFactor": 0,
+    "content": 1200,
+    "unitCode": {
+      "content": "KGM",
+      "listId": "nl.agroconnect.codelist.cl020"
+    }
+  },
+  "product": {
+    "thirdPartyIds": [
+      {
+        "content": "1928",
+        "schemeId": "com.iperen.codelist.artikelnummer"
+      },
+      {
+        "content": "8700127724892",
+        "schemeId": "nl.gs1.gtin"
+      }
+    ],
+    "name": "Peters professional 10-12-18, Blossom Booster",
+    "additionalProductProperties": [
+      {
+        "code": {
+          "content": "1",
+          "listId": "nl.agroconnect.codelist.cl363"
+        },
+        "measureValue": {
+          "scaleFactor": 0,
+          "content": 10,
+          "unitCode": {
+            "content": "P1",
+            "listId": "nl.agroconnect.codelist.cl020"
+          }
+        }
+      },
+      {
+        "code": {
+          "content": "14",
+          "listId": "nl.agroconnect.codelist.cl363"
+        },
+        "measureValue": {
+          "scaleFactor": 0,
+          "content": 12,
+          "unitCode": {
+            "content": "P1",
+            "listId": "nl.agroconnect.codelist.cl020"
+          }
+        }
+      },
+      {
+        "code": {
+          "content": "19",
+          "listId": "nl.agroconnect.codelist.cl363"
+        },
+        "measureValue": {
+          "scaleFactor": 0,
+          "content": 18,
+          "unitCode": {
+            "content": "P1",
+            "listId": "nl.agroconnect.codelist.cl020"
+          }
+        }
+      }
+    ]
+  },
+  "location": {
+    "thirdPartyIds": [
+      {
+        "content": "1",
+        "schemeId": "com.iperen.codelist.cl030"
+      }
+    ],
+    "name": "De Tuinderij Honselersdijk"
+  }
+}

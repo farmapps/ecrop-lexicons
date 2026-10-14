@@ -1,0 +1,31 @@
+{
+  "thirdPartyIds": [
+    {
+      "content": "A342_1_6",
+      "schemeId": "com.my-mps.codelist.kasnummer"
+    }
+  ],
+  "name": "Tuin1, perceel6",
+  "startDate": "2024-01-12",
+  "endDate": "2024-12-14",
+  "type": "CROPFIELD",
+  "area": {
+    "content": 6000,
+    "unitCode": {
+      "content": "MTK",
+      "listId": "nl.agroconnect.codelist.cl020"
+    }
+  },
+  "regularOrOrganic": {
+    "content": "REGULAR",
+    "listId": "nl.agroconnect.codelist.cl015"
+  },
+  "localSoilType": {
+    "content": "CLAY",
+    "listId": "nl.agroconnect.codelist.cl405"
+  },
+  "regulatorySoilType": {
+    "content": "CLAY",
+    "listId": "nl.agroconnect.codelist.cl405"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "id": {
+    "content": "6f6d3b8c-2e7a-4a1d-9b2c-0e1f2a3b4c5d",
+    "schemeId": "com.my-mps.codelist.guid"
+  },
+  "thirdPartyIds": [
+    {
+      "content": "73882921",
+      "schemeId": "com.iperen.codelist.orderregelnummer"
+    }
+  ],
+  "dateOfDelivery": "2025-03-08",
+  "quantity": {
+    "content": 1,
+    "unitCode": {
+      "content": "LTR",
+      "listId": "nl.agroconnect.codelist.cl020"
+    }
+  },
+  "product": {
+    "thirdPartyIds": [
+      {
+        "content": "2435",
+        "schemeId": "com.iperen.codelist.artikelnummer"
+      },
+      {
+        "content": "8700991172001",
+        "schemeId": "nl.gs1.gtin"
+      },
+      {
+        "content": "838439 N",
+        "schemeId": "nl.ctgb.codelist.toelatingsnummer"
+      }
+    ],
+    "name": "Movento 100 SC - 1L - spirotetramat"
+  },
+  "location": {
+    "thirdPartyIds": [
+      {
+        "content": "1",
+        "schemeId": "com.iperen.codelist.cl030"
+      }
+    ],
+    "name": "De Tuinderij Honselersdijk"
+  }
+}

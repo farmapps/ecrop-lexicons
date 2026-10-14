@@ -1,0 +1,12 @@
+[
+  {
+    "op": "test",
+    "path": "/operations/0/area/content",
+    "value": 25000
+  },
+  {
+    "op": "replace",
+    "path": "/operations/0/area/content",
+    "value": 24500
+  }
+]

@@ -1,0 +1,96 @@
+{
+  "type": "Feature",
+  "id": 384912567,
+  "conformsTo": [
+    "http://www.opengis.net/spec/json-fg-1/1.0/conf/core",
+    "http://www.opengis.net/spec/json-fg-1/1.0/conf/types-schemas"
+  ],
+  "coordRefSys": "http://www.opengis.net/def/crs/EPSG/0/28992",
+  "time": {
+    "interval": [
+      "2024-01-12",
+      "2024-12-14"
+    ]
+  },
+  "place": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          180000,
+          440000
+        ],
+        [
+          182000,
+          440000
+        ],
+        [
+          182000,
+          442000
+        ],
+        [
+          180000,
+          442000
+        ],
+        [
+          180000,
+          440000
+        ]
+      ]
+    ]
+  },
+  "geometry": null,
+  "featureType": "agroconnect:ecrop:plot",
+  "properties": {
+    "plotId": {
+      "content": "e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "schemeId": "com.my-mps.codelist.guid"
+    },
+    "name": "Tuin1, perceel6",
+    "area": {
+      "content": 6000,
+      "unitCode": {
+        "content": "MTK",
+        "listId": "nl.agroconnect.codelist.cl020"
+      }
+    },
+    "entryPoint": {
+      "type": "Point",
+      "coordinates": [
+        180050,
+        440020
+      ]
+    },
+    "abLine": {
+      "type": "LineString",
+      "coordinates": [
+        [
+          180200,
+          440100
+        ],
+        [
+          181800,
+          441900
+        ]
+      ]
+    }
+  },
+  "links": [
+    {
+      "rel": "self",
+      "href": "https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items/384912567?profile=jsonfg",
+      "type": "application/geo+json"
+    },
+    {
+      "rel": "collection",
+      "href": "https://standard-api.agroconnect.nl/plot-features/v1/collections/plots",
+      "type": "application/json"
+    },
+    {
+      "rel": "https://ecrop.agroconnect.nl/rel/plot",
+      "href": "https://standard-api.agroconnect.nl/ecrop/v1/growers/com.my-mps.codelist.guid/e3c8a1b2-4f6e-4a2d-8e3b-9c1d2e3f4a5b/plots/com.my-mps.codelist.guid/e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b",
+      "type": "application/json",
+      "title": "Bijbehorend Plot business-object"
+    }
+  ]
+}

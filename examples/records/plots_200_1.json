@@ -1,0 +1,33 @@
+{
+  "$type": "nl.agroconnect.ecrop.plot",
+  "thirdPartyIds": [
+    {
+      "content": "A342_1_7",
+      "schemeId": "com.my-mps.codelist.kasnummer"
+    }
+  ],
+  "name": "Tuin1, perceel7",
+  "startDate": "2024-02-01",
+  "endDate": "2024-11-30",
+  "plotType": "CROPFIELD",
+  "area": {
+    "scaleFactor": 0,
+    "content": 4200,
+    "unitCode": {
+      "content": "MTK",
+      "listId": "nl.agroconnect.codelist.cl020"
+    }
+  },
+  "regularOrOrganic": {
+    "content": "REGULAR",
+    "listId": "nl.agroconnect.codelist.cl015"
+  },
+  "localSoilType": {
+    "content": "CLAY",
+    "listId": "nl.agroconnect.codelist.cl405"
+  },
+  "regulatorySoilType": {
+    "content": "CLAY",
+    "listId": "nl.agroconnect.codelist.cl405"
+  }
+}
