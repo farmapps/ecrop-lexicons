@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "nl.agroconnect.ecrop.plotFeature",
+  "id": "org.farmapps.temp.ecrop.plotFeature",
   "defs": {
     "main": {
       "type": "record",
@@ -33,18 +33,18 @@
           },
           "coordRefSys": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.geo.defs#coordRefSysType"
+            "ref": "org.farmapps.temp.ecrop.geo.defs#coordRefSysType"
           },
           "time": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.geo.defs#jsonFgTimeType"
+            "ref": "org.farmapps.temp.ecrop.geo.defs#jsonFgTimeType"
           },
           "place": {
             "type": "union",
             "description": "Geometry (JSON FG) of the plot (Polygon or MultiPolygon) using the CRS described in coordRefSys. Only applicable for profile=jsonfg. Should not be used for WGS84 coordinates (use geometry in stead) Plot geometry types: Polygon or MultiPolygon.",
             "refs": [
-              "nl.agroconnect.ecrop.geo.defs#polygonType",
-              "nl.agroconnect.ecrop.geo.defs#multiPolygonType"
+              "org.farmapps.temp.ecrop.geo.defs#polygonType",
+              "org.farmapps.temp.ecrop.geo.defs#multiPolygonType"
             ],
             "closed": true
           },
@@ -52,8 +52,8 @@
             "type": "union",
             "description": "Optional WGS84 fallback geometry (plain GeoJSON) for consumers that support GeoJSON but not JSON-FG. Null when not provided. Constrained to the same geometry types as \"place\" in this schema. Since this field is required, it is nullable in case WGS84 is nog relevant Plot geometry types: Polygon or MultiPolygon.",
             "refs": [
-              "nl.agroconnect.ecrop.geo.defs#polygonType",
-              "nl.agroconnect.ecrop.geo.defs#multiPolygonType"
+              "org.farmapps.temp.ecrop.geo.defs#polygonType",
+              "org.farmapps.temp.ecrop.geo.defs#multiPolygonType"
             ],
             "closed": true
           },
@@ -66,13 +66,13 @@
           },
           "properties": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.geo.defs#plotFeatureProperties"
+            "ref": "org.farmapps.temp.ecrop.geo.defs#plotFeatureProperties"
           },
           "links": {
             "type": "array",
             "items": {
               "type": "ref",
-              "ref": "nl.agroconnect.ecrop.defs#link"
+              "ref": "org.farmapps.temp.ecrop.defs#link"
             }
           }
         },

@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "nl.agroconnect.ecrop.defs",
+  "id": "org.farmapps.temp.ecrop.defs",
   "description": "Shared types of the AgroConnect eCrop API 1.1.0 (converted from OpenAPI).",
   "defs": {
     "posInt32Type": {

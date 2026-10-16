@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "nl.agroconnect.ecrop.geo.defs",
+  "id": "org.farmapps.temp.ecrop.geo.defs",
   "description": "Geo (GeoJSON / JSON-FG / OGC API Features) types of the AgroConnect eCrop API 1.1.0.",
   "defs": {
     "coordRefSysType": {
@@ -14,11 +14,11 @@
       "properties": {
         "date": {
           "type": "ref",
-          "ref": "nl.agroconnect.ecrop.defs#dateType"
+          "ref": "org.farmapps.temp.ecrop.defs#dateType"
         },
         "timestamp": {
           "type": "ref",
-          "ref": "nl.agroconnect.ecrop.defs#dateTimeType"
+          "ref": "org.farmapps.temp.ecrop.defs#dateTimeType"
         },
         "interval": {
           "type": "ref",
@@ -168,7 +168,7 @@
           "type": "array",
           "items": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#link"
+            "ref": "org.farmapps.temp.ecrop.defs#link"
           }
         }
       }
@@ -269,7 +269,7 @@
           "type": "array",
           "items": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#link"
+            "ref": "org.farmapps.temp.ecrop.defs#link"
           }
         }
       }
@@ -291,7 +291,7 @@
           "type": "array",
           "items": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#link"
+            "ref": "org.farmapps.temp.ecrop.defs#link"
           }
         }
       }
@@ -302,7 +302,7 @@
       "properties": {
         "plotId": {
           "type": "ref",
-          "ref": "nl.agroconnect.ecrop.defs#primaryIdType",
+          "ref": "org.farmapps.temp.ecrop.defs#primaryIdType",
           "description": "The id of the plot this feature belongs to. This is the only reference between plot and feature that is stored: the plot finds its feature(s) through a query on this property (see the plotSchemeId and plotId query parameters of GET /collections/plots/items)."
         },
         "name": {
@@ -311,7 +311,7 @@
         },
         "area": {
           "type": "ref",
-          "ref": "nl.agroconnect.ecrop.defs#measureType",
+          "ref": "org.farmapps.temp.ecrop.defs#measureType",
           "description": "The surface (measured in for instance square meters, hectare) of this production plot."
         },
         "entryPoint": {
@@ -392,7 +392,7 @@
           "type": "array",
           "items": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#link"
+            "ref": "org.farmapps.temp.ecrop.defs#link"
           }
         }
       },
@@ -447,7 +447,7 @@
           "type": "array",
           "items": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#link"
+            "ref": "org.farmapps.temp.ecrop.defs#link"
           }
         }
       },
@@ -496,7 +496,7 @@
           "type": "array",
           "items": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#link"
+            "ref": "org.farmapps.temp.ecrop.defs#link"
           }
         },
         "featureType": {

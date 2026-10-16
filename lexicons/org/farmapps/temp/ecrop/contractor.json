@@ -1,10 +1,10 @@
 {
   "lexicon": 1,
-  "id": "nl.agroconnect.ecrop.grower",
+  "id": "org.farmapps.temp.ecrop.contractor",
   "defs": {
     "main": {
       "type": "record",
-      "description": "The details of the grower (e.g. the farmer) that is responsible for the cultivation of the crop.",
+      "description": "The details of the contractor who performs tasks and operations on behalf of a grower",
       "key": "tid",
       "record": {
         "type": "object",
@@ -15,7 +15,7 @@
         "properties": {
           "thirdPartyIds": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "ref": "org.farmapps.temp.ecrop.defs#thirdPartyIdsType",
             "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the resource is identified by third parties (e.g. a gln, or chamber of commerce number)"
           },
           "name": {
@@ -48,11 +48,11 @@
           },
           "postalAddress": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#postalAddressType"
+            "ref": "org.farmapps.temp.ecrop.defs#postalAddressType"
           },
           "visitorsAddress": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#visitorsAddressType"
+            "ref": "org.farmapps.temp.ecrop.defs#visitorsAddressType"
           }
         }
       }

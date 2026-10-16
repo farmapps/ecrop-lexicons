@@ -53,7 +53,7 @@ negative "missing scaleFactor"   plot_200 'del(.area.scaleFactor)'
 negative "wrong field type"      plot_200 '.plotType = 5'
 negative "missing required"      grower_200 'del(.name)'
 negative "invalid datetime"      taskRequest '.startDateTime = "12-03-2025"'
-negative "wrong geometry union"  plotFeatureTopLevel_200_rfc7946 '.geometry["$type"] = "nl.agroconnect.ecrop.geo.defs#pointType"'
+negative "wrong geometry union"  plotFeatureTopLevel_200_rfc7946 '.geometry["$type"] = "org.farmapps.temp.ecrop.geo.defs#pointType"'
 negative "ring too short"        plotFeatureTopLevel_200_rfc7946 '.geometry.coordinates[0].positions |= .[0:3]'
 
 [ $fail = 0 ] && echo "ALL TESTS PASSED" || echo "SOME TESTS FAILED"

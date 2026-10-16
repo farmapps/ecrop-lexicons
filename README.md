@@ -5,9 +5,9 @@ atproto Lexicons for the [AgroConnect eCrop API](https://github.com/AgroConnectN
 
 | Lexicon | Contents |
 |---|---|
-| `nl.agroconnect.ecrop.defs` | All business / shared schemas as named defs (ids, code, measure, characteristic, address, party, crop, plot, task, operation, allocation, product, equipment, worker, problem details, link, JSON Patch, …) |
-| `nl.agroconnect.ecrop.geo.defs` | GeoJSON / JSON-FG / OGC API Features schemas (position, point, lineString, polygon, multiPolygon, plot feature (collection), collection, extent, …) |
-| `nl.agroconnect.ecrop.grower` `.supplier` `.contractor` `.productionLocation` `.crop` `.plot` `.task` `.inboundDeliveryByGrower` `.inboundDeliveryBySupplier` `.plotFeature` | Record types (`key: tid`) for the API resources. The record body is the `*Details` schema; the server-assigned `PrimaryId` is replaced by the record's AT-URI. |
+| `org.farmapps.temp.ecrop.defs` | All business / shared schemas as named defs (ids, code, measure, characteristic, address, party, crop, plot, task, operation, allocation, product, equipment, worker, problem details, link, JSON Patch, …) |
+| `org.farmapps.temp.ecrop.geo.defs` | GeoJSON / JSON-FG / OGC API Features schemas (position, point, lineString, polygon, multiPolygon, plot feature (collection), collection, extent, …) |
+| `org.farmapps.temp.ecrop.grower` `.supplier` `.contractor` `.productionLocation` `.crop` `.plot` `.task` `.inboundDeliveryByGrower` `.inboundDeliveryBySupplier` `.plotFeature` | Record types (`key: tid`) for the API resources. The record body is the `*Details` schema; the server-assigned `PrimaryId` is replaced by the record's AT-URI. |
 
 Def names are the OpenAPI schema names in lowerCamelCase (`MeasureType` → `#measureType`).
 
@@ -67,7 +67,7 @@ each field's description ("OpenAPI property name: …"):
 python3 tools/openapi2lexicon.py openapi/ecrop.yaml lexicons
 
 # convert an eCrop JSON payload into a record (scales floats, reshapes geometry, renames fields)
-python3 tools/openapi2record.py lexicons nl.agroconnect.ecrop.plot payload.json
+python3 tools/openapi2record.py lexicons org.farmapps.temp.ecrop.plot payload.json
 
 # test: goat lint + parse, validate all OpenAPI examples as records, negative tests
 GOAT=/path/to/goat tests/run.sh

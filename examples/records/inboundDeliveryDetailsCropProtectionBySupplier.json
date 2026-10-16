@@ -1,5 +1,5 @@
 {
-  "$type": "nl.agroconnect.ecrop.inboundDeliveryBySupplier",
+  "$type": "org.farmapps.temp.ecrop.inboundDeliveryBySupplier",
   "thirdPartyIds": [
     {
       "content": "73882921",

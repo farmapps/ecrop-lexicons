@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "nl.agroconnect.ecrop.task",
+  "id": "org.farmapps.temp.ecrop.task",
   "defs": {
     "main": {
       "type": "record",
@@ -18,7 +18,7 @@
         "properties": {
           "thirdPartyIds": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "ref": "org.farmapps.temp.ecrop.defs#thirdPartyIdsType",
             "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the task is identified by third parties."
           },
           "name": {
@@ -27,23 +27,23 @@
           },
           "startDateTime": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#dateTimeType",
+            "ref": "org.farmapps.temp.ecrop.defs#dateTimeType",
             "description": "The date/timestamp of beginning the execution of the task."
           },
           "endDateTime": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#dateTimeType",
+            "ref": "org.farmapps.temp.ecrop.defs#dateTimeType",
             "description": "The date/timestamp of the ending of execution the task."
           },
           "status": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#processStateType"
+            "ref": "org.farmapps.temp.ecrop.defs#processStateType"
           },
           "operations": {
             "type": "array",
             "items": {
               "type": "ref",
-              "ref": "nl.agroconnect.ecrop.defs#operationDetails"
+              "ref": "org.farmapps.temp.ecrop.defs#operationDetails"
             }
           }
         }

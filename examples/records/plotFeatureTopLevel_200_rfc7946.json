@@ -1,9 +1,9 @@
 {
-  "$type": "nl.agroconnect.ecrop.plotFeature",
+  "$type": "org.farmapps.temp.ecrop.plotFeature",
   "geoJsonType": "Feature",
   "featureId": "384912567",
   "geometry": {
-    "$type": "nl.agroconnect.ecrop.geo.defs#polygonType",
+    "$type": "org.farmapps.temp.ecrop.geo.defs#polygonType",
     "scaleFactor": -4,
     "geoJsonType": "Polygon",
     "coordinates": [

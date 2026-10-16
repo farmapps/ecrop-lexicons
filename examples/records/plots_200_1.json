@@ -1,5 +1,5 @@
 {
-  "$type": "nl.agroconnect.ecrop.plot",
+  "$type": "org.farmapps.temp.ecrop.plot",
   "thirdPartyIds": [
     {
       "content": "A342_1_7",

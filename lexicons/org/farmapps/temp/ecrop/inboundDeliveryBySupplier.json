@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "nl.agroconnect.ecrop.inboundDeliveryBySupplier",
+  "id": "org.farmapps.temp.ecrop.inboundDeliveryBySupplier",
   "defs": {
     "main": {
       "type": "record",
@@ -18,26 +18,26 @@
         "properties": {
           "thirdPartyIds": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "ref": "org.farmapps.temp.ecrop.defs#thirdPartyIdsType",
             "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the inbound delivery is identified by third parties."
           },
           "dateOfDelivery": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "ref": "org.farmapps.temp.ecrop.defs#dateType",
             "description": "Date at which the product is delivered at the location of the grower (\"YYYY-MM-DD\")"
           },
           "quantity": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#measureType",
+            "ref": "org.farmapps.temp.ecrop.defs#measureType",
             "description": "Quantity of the product delivered to the grower."
           },
           "product": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#productDetails"
+            "ref": "org.farmapps.temp.ecrop.defs#productDetails"
           },
           "location": {
             "type": "ref",
-            "ref": "nl.agroconnect.ecrop.defs#productionLocationDetails",
+            "ref": "org.farmapps.temp.ecrop.defs#productionLocationDetails",
             "description": "Identification of the production location of the grower at which the product is delivered"
           }
         }

@@ -24,7 +24,7 @@ import sys
 
 import yaml
 
-PREFIX = "nl.agroconnect.ecrop"
+PREFIX = "org.farmapps.temp.ecrop"
 CORE = f"{PREFIX}.defs"
 GEO = f"{PREFIX}.geo.defs"
 
