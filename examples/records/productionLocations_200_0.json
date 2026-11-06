@@ -1,5 +1,5 @@
 {
-  "$type": "org.farmapps.temp.ecrop.productionLocation",
+  "$type": "nl.agroconnect.ecrop.productionLocation",
   "thirdPartyIds": [
     {
       "content": "8700778121125",

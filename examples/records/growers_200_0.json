@@ -1,5 +1,5 @@
 {
-  "$type": "org.farmapps.temp.ecrop.grower",
+  "$type": "nl.agroconnect.ecrop.grower",
   "thirdPartyIds": [
     {
       "content": "09123559",
