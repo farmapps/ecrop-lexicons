@@ -34,7 +34,7 @@
     },
     "nsidType": {
       "type": "string",
-      "description": "Namespace Identifier (NSID) Pattern: ^[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(\\.[a-zA-Z]([a-zA-Z0-9]{0,62})?)$"
+      "description": "Namespace Identifier (NSID) Type used in the AT Protocol for decentralized identities, structured using reverse domain name syntax Pattern: ^[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(\\.[a-zA-Z]([a-zA-Z0-9]{0,62})?)$"
     },
     "primaryIdContentType": {
       "type": "string",
@@ -227,9 +227,7 @@
       "type": "object",
       "description": "Generic type for physical addresses",
       "required": [
-        "postalCode",
-        "cityName",
-        "country"
+        "cityName"
       ],
       "properties": {
         "postalCode": {
@@ -270,9 +268,7 @@
       "type": "object",
       "description": "Specific ype for postal addresses",
       "required": [
-        "postalCode",
-        "cityName",
-        "country"
+        "cityName"
       ],
       "properties": {
         "postalCode": {
@@ -313,9 +309,7 @@
       "type": "object",
       "description": "Specific ype for visitor addresses",
       "required": [
-        "postalCode",
-        "cityName",
-        "country"
+        "cityName"
       ],
       "properties": {
         "postalCode": {
@@ -1247,19 +1241,20 @@
       "type": "object",
       "description": "Crop type at the level of potato, sugar beet, onion, winter wheat, etc.\nFor mixed crops more then one type of crop can be grown in the same period at the same plot.",
       "required": [
-        "species",
-        "variety"
+        "species"
       ],
       "properties": {
         "species": {
-          "type": "string",
+          "type": "ref",
+          "ref": "#codeType",
           "description": "Code of the plant species, at the aggregation level of potato, sugar beet, onion, etc. For eCrop in The Netherlands, code list nl.cl263 is used for crop species."
         },
         "variety": {
-          "type": "string",
+          "type": "ref",
+          "ref": "#codeType",
           "description": "Identification of the variety of the type of crop that is grown. For eCrop in The Netherlands code list nl.cl232 is used."
         },
-        "precentageMix": {
+        "percentageInMix": {
           "type": "integer",
           "description": "To be used in case of a mixed crop. Indicator of the percentage of this crop species related to the other crop species that are part of this mixed crop. The percentage is based on the weight proportions of the seed of each of the species that are part of the mixed crop. Integer mantissa, scaled by scaleFactor (originally a float)."
         },
@@ -1278,7 +1273,8 @@
         "thirdPartyIds",
         "name",
         "plotType",
-        "area"
+        "area",
+        "regulatorySoilType"
       ],
       "properties": {
         "primaryId": {
@@ -1336,6 +1332,24 @@
           "ref": "#codeType",
           "description": "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\nFor eCrop in The Netherlands code list nl.cl405 is used."
         },
+        "alternativeName": {
+          "type": "string",
+          "description": "Option to include a second, alternative, name for the plot.\nFor instance to be used to include the name the farmer registered in his FMIS and the name that is registered in the RVO-database."
+        },
+        "region": {
+          "type": "string",
+          "description": "The region the plot is located in."
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType",
+          "description": "The country the plot is located in."
+        },
+        "landUseCategory": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "The land use category of this plot.\nCode list: nl.agroconnect.codelist.cl961. Possible values: ARL (Arable Land), GRL (Grassland), FLL (Fallow Land) and NTA (Natural Area)."
+        },
         "greenhouseLocation": {
           "type": "ref",
           "ref": "#greenhouseLocationDetails"
@@ -1349,7 +1363,8 @@
         "thirdPartyIds",
         "name",
         "plotType",
-        "area"
+        "area",
+        "regulatorySoilType"
       ],
       "properties": {
         "thirdPartyIds": {
@@ -1401,6 +1416,24 @@
           "type": "ref",
           "ref": "#codeType",
           "description": "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\nFor eCrop in The Netherlands code list nl.cl405 is used."
+        },
+        "alternativeName": {
+          "type": "string",
+          "description": "Option to include a second, alternative, name for the plot.\nFor instance to be used to include the name the farmer registered in his FMIS and the name that is registered in the RVO-database."
+        },
+        "region": {
+          "type": "string",
+          "description": "The region the plot is located in."
+        },
+        "country": {
+          "type": "ref",
+          "ref": "#countryCodeType",
+          "description": "The country the plot is located in."
+        },
+        "landUseCategory": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "The land use category of this plot.\nCode list: nl.agroconnect.codelist.cl961. Possible values: ARL (Arable Land), GRL (Grassland), FLL (Fallow Land) and NTA (Natural Area)."
         },
         "greenhouseLocation": {
           "type": "ref",
@@ -1497,6 +1530,10 @@
             "type": "ref",
             "ref": "#operationDetails"
           }
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional free-text note about the task."
         }
       }
     },
@@ -1540,6 +1577,10 @@
             "type": "ref",
             "ref": "#operationDetails"
           }
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional free-text note about the task."
         }
       }
     },
@@ -1550,6 +1591,7 @@
         "thirdPartyIds",
         "name",
         "startDateTime",
+        "operationType",
         "status"
       ],
       "properties": {
@@ -1628,8 +1670,12 @@
           "description": "The option to attach one or more workers assigned to execute this operation.",
           "items": {
             "type": "ref",
-            "ref": "#workAssignment"
+            "ref": "#workerAssignment"
           }
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional free-text note about the operation."
         }
       }
     },
@@ -1655,7 +1701,7 @@
         "allocationType": {
           "type": "ref",
           "ref": "#codeType",
-          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.cl271 is used. (OpenAPI property name: 'type')"
+          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.agroconnect.codelist.cl271 is used. (OpenAPI property name: 'type')"
         },
         "quantity": {
           "type": "ref",
@@ -1673,6 +1719,19 @@
           "type": "ref",
           "ref": "#productDetails",
           "description": "Product used as allocation in this operation"
+        },
+        "greenhouseLocation": {
+          "type": "ref",
+          "ref": "#greenhouseLocationDetails",
+          "description": "The greenhouse location the allocation applies to (optional)."
+        },
+        "plantSpecies": {
+          "type": "array",
+          "description": "The plant species the allocation applies to, for instance the species that is planted or sown (optional).",
+          "items": {
+            "type": "ref",
+            "ref": "#plantSpecies"
+          }
         }
       }
     },
@@ -1699,7 +1758,7 @@
         "allocationType": {
           "type": "ref",
           "ref": "#codeType",
-          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.cl271 is used. (OpenAPI property name: 'type')"
+          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.agroconnect.codelist.cl271 is used. (OpenAPI property name: 'type')"
         },
         "quantity": {
           "type": "ref",
@@ -1718,9 +1777,58 @@
           "ref": "#productDetails",
           "description": "Product used as allocation in this operation"
         },
+        "greenhouseLocation": {
+          "type": "ref",
+          "ref": "#greenhouseLocationDetails",
+          "description": "The greenhouse location the allocation applies to (optional)."
+        },
+        "plantSpecies": {
+          "type": "array",
+          "description": "The plant species the allocation applies to, for instance the species that is planted or sown (optional).",
+          "items": {
+            "type": "ref",
+            "ref": "#plantSpecies"
+          }
+        },
         "treatmentzone": {
           "type": "ref",
           "ref": "#treatmentZoneDetails"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Short description of the reason why this particular input (e.g. this crop protection product) is used."
+        },
+        "components": {
+          "type": "array",
+          "description": "Specification of the mixed content (mixture of several components) of the input, for instance a fertilizer.",
+          "items": {
+            "type": "ref",
+            "ref": "#componentDetails"
+          }
+        }
+      }
+    },
+    "componentDetails": {
+      "type": "object",
+      "description": "Specification of one component of the mixed content of a product, for instance a fertilizer.",
+      "required": [
+        "code",
+        "quantity"
+      ],
+      "properties": {
+        "code": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Identification of the component of the composed product.\nCode list: nl.agroconnect.codelist.cl363"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the component of the composed product."
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Specification of the quantity of this component as part of the composed product.\nCould be in terms of a percentage or in terms of a dimension; for instance gram/kilogram or milliliter per liter."
         }
       }
     },
@@ -1747,7 +1855,7 @@
         "allocationType": {
           "type": "ref",
           "ref": "#codeType",
-          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.cl271 is used. (OpenAPI property name: 'type')"
+          "description": "Indicator for the type of input or output that is used or delivered by this operation. For instance: \n- \"FERTIL\" = fertilizer\n- \"PROTEC\" = crop protection product\n- \"ENERG\" = energy, etc. \nFor this AgroConnect code list nl.agroconnect.codelist.cl271 is used. (OpenAPI property name: 'type')"
         },
         "quantity": {
           "type": "ref",
@@ -1765,6 +1873,19 @@
           "type": "ref",
           "ref": "#productDetails",
           "description": "Product used as allocation in this operation"
+        },
+        "greenhouseLocation": {
+          "type": "ref",
+          "ref": "#greenhouseLocationDetails",
+          "description": "The greenhouse location the allocation applies to (optional)."
+        },
+        "plantSpecies": {
+          "type": "array",
+          "description": "The plant species the allocation applies to, for instance the species that is planted or sown (optional).",
+          "items": {
+            "type": "ref",
+            "ref": "#plantSpecies"
+          }
         },
         "treatmentzone": {
           "type": "ref",
@@ -1794,6 +1915,14 @@
         "area": {
           "type": "ref",
           "ref": "#measureType"
+        },
+        "startLocation": {
+          "type": "string",
+          "description": "Specification of the beginning of the treatment zone.\nFor instance an identifier of a bed of Tulips in an open field."
+        },
+        "endLocation": {
+          "type": "string",
+          "description": "Specification of the end of the treatment zone.\nFor instance an identifier of a bed of Tulips in an open field."
         }
       }
     },
@@ -1888,7 +2017,7 @@
         }
       }
     },
-    "inboundDeliveryDetailsGrower": {
+    "inboundDeliveryDetailsByGrower": {
       "type": "object",
       "description": "Details of the materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound\ndelivery describes a certain amount of a certain product acquired by a grower through an order to\na supplier.",
       "required": [
@@ -1993,12 +2122,12 @@
         }
       }
     },
-    "equipmentDetail": {
+    "equipmentDetails": {
       "type": "object",
       "description": "Details of equipment used to support farming activities, such as tractors, implements, sensor systems, installations, or hand tools.",
       "required": [
         "thirdPartyIds",
-        "equipmentType"
+        "name"
       ],
       "properties": {
         "thirdPartyIds": {
@@ -2011,15 +2140,9 @@
           "description": "Name of the equipment"
         },
         "equipmentType": {
-          "type": "string",
-          "description": "Type of equipment (OpenAPI property name: 'type')",
-          "knownValues": [
-            "Tractor",
-            "Implement",
-            "Sensorsystem",
-            "Installation",
-            "Handtool"
-          ]
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Type of equipment, for instance Tractor, ImplementAssembly, SensorSystem, Installation or HandTool.\nCode list: nl.agroconnect.codelist.cl962 (OpenAPI property name: 'type')"
         }
       }
     },
@@ -2027,14 +2150,12 @@
       "type": "object",
       "description": "Identifies a piece of equipment that is used in a certain operation, and the period and usage figures of that use.",
       "required": [
-        "equipment",
-        "startDateTime",
-        "endDateTime"
+        "equipment"
       ],
       "properties": {
         "equipment": {
           "type": "ref",
-          "ref": "#equipmentDetail",
+          "ref": "#equipmentDetails",
           "description": "The equipment assigned to and used in the operation."
         },
         "startDateTime": {
@@ -2047,7 +2168,7 @@
           "ref": "#dateTimeType",
           "description": "The date/timestamp the equipment stopped being used in the operation."
         },
-        "time": {
+        "executionTime": {
           "type": "ref",
           "ref": "#measureType",
           "description": "The total time the equipment was in use during the operation (e.g. working hours or engine hours)."
@@ -2059,18 +2180,18 @@
         }
       }
     },
-    "worker": {
+    "workerDetails": {
       "type": "object",
-      "description": "A person that performs (part of) an operation, e.g. a farm employee or contractor.",
+      "description": "Details of a person that performs (part of) an operation, e.g. a farm employee or contractor.",
       "required": [
-        "workerId",
+        "thirdPartyIds",
         "name"
       ],
       "properties": {
-        "workerId": {
+        "thirdPartyIds": {
           "type": "ref",
-          "ref": "#idType",
-          "description": "Identifier of the worker. (OpenAPI property name: 'id')"
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the worker is identified by third parties, e.g. an employee number"
         },
         "name": {
           "type": "string",
@@ -2080,7 +2201,7 @@
           "type": "string",
           "description": "Phone number of the worker."
         },
-        "email": {
+        "eMail": {
           "type": "string",
           "description": "E-mail address of the worker."
         },
@@ -2090,18 +2211,16 @@
         }
       }
     },
-    "workAssignment": {
+    "workerAssignment": {
       "type": "object",
       "description": "Identifies a worker that is assigned to a certain operation, and the period and execution time of that assignment.",
       "required": [
-        "worker",
-        "startDateTime",
-        "endDateTime"
+        "worker"
       ],
       "properties": {
         "worker": {
           "type": "ref",
-          "ref": "#worker",
+          "ref": "#workerDetails",
           "description": "The worker assigned to the operation."
         },
         "startDateTime": {
@@ -2118,6 +2237,535 @@
           "type": "ref",
           "ref": "#measureType",
           "description": "The total time the worker spent executing the operation."
+        }
+      }
+    },
+    "substanceDetails": {
+      "type": "object",
+      "description": "Details of an active substance used in a crop protection product.",
+      "required": [
+        "thirdPartyIds"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the substance is identified by third parties, e.g. CAS (Chemical Abstracts Service) number, EC (European Community) number  '"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the substance"
+        },
+        "additionalProductProperties": {
+          "type": "array",
+          "description": "List of additional substance characteristics",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "nutrientDetails": {
+      "type": "object",
+      "description": "Details of an nutrient used in a fertilizer product.",
+      "required": [
+        "thirdPartyIds"
+      ],
+      "properties": {
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "List of alternative identifiers (\\\"AKA, also-know-as\\\") with which the nutrient is identified by third parties"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the nutrient"
+        },
+        "additionalProductProperties": {
+          "type": "array",
+          "description": "List of additional nutrient characteristics",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "footprintDeclaration": {
+      "type": "object",
+      "description": "All relevant data for PefCR calculation for one crop at one production location of one grower in one period",
+      "required": [
+        "declarationId",
+        "sequenceNumber",
+        "versionNumber",
+        "startDate",
+        "endDate",
+        "grower",
+        "cropSection",
+        "locationSection",
+        "cultivationSection",
+        "cropProtectionSection",
+        "fertilizerSection",
+        "energySection",
+        "waterConsumptionSection",
+        "wasteSection",
+        "distributionSection",
+        "additionalProductSection"
+      ],
+      "properties": {
+        "declarationId": {
+          "type": "ref",
+          "ref": "#idType",
+          "description": "Identification of the footprint declaration as assigned by the data provider. (OpenAPI property name: 'id')"
+        },
+        "sequenceNumber": {
+          "type": "ref",
+          "ref": "#posInt32Type",
+          "description": "Sequence number of the footprint declaration. Grower-identification, year and sequence number uniquely identify a footprint declaration (which can have multiple versions)."
+        },
+        "versionNumber": {
+          "type": "ref",
+          "ref": "#posInt32Type",
+          "description": "Version number of the footprint declaration. A footprint declaration, identified by grower, year and sequence number, can have multiple versions; the highest version number is the most recent."
+        },
+        "versionDateTime": {
+          "type": "ref",
+          "ref": "#dateTimeType",
+          "description": "Date-time of publication of the footprint declaration."
+        },
+        "thirdPartyIds": {
+          "type": "ref",
+          "ref": "#thirdPartyIdsType",
+          "description": "Third party identifications of the footprint declaration."
+        },
+        "startDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "Start date of the period the footprint declaration applies to"
+        },
+        "endDate": {
+          "type": "ref",
+          "ref": "#dateType",
+          "description": "End date of the period the footprint declaration applies to"
+        },
+        "grower": {
+          "type": "ref",
+          "ref": "#growerDetails",
+          "description": "The grower who is owner of the crop the footprint is calculated on"
+        },
+        "cropSection": {
+          "type": "ref",
+          "ref": "#cropSection"
+        },
+        "locationSection": {
+          "type": "ref",
+          "ref": "#locationSection"
+        },
+        "cultivationSection": {
+          "type": "ref",
+          "ref": "#cultivationSection"
+        },
+        "cropProtectionSection": {
+          "type": "ref",
+          "ref": "#cropProtectionSection"
+        },
+        "fertilizerSection": {
+          "type": "ref",
+          "ref": "#fertilizerSection"
+        },
+        "energySection": {
+          "type": "ref",
+          "ref": "#energySection"
+        },
+        "waterConsumptionSection": {
+          "type": "ref",
+          "ref": "#waterConsumptionSection"
+        },
+        "wasteSection": {
+          "type": "ref",
+          "ref": "#wasteSection"
+        },
+        "distributionSection": {
+          "type": "ref",
+          "ref": "#distributionSection"
+        },
+        "additionalProductSection": {
+          "type": "ref",
+          "ref": "#additionalProductSection"
+        }
+      }
+    },
+    "cropSection": {
+      "type": "object",
+      "description": "All relevant crop data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "plantSpecies",
+        "additionalQuestions"
+      ],
+      "properties": {
+        "plantSpecies": {
+          "type": "ref",
+          "ref": "#plantSpecies",
+          "description": "Crop on which the footprint declaration is based."
+        },
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions about the crop for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "locationSection": {
+      "type": "object",
+      "description": "All relevant location data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "location",
+        "additionalQuestions"
+      ],
+      "properties": {
+        "location": {
+          "type": "ref",
+          "ref": "#productionLocationDetails",
+          "description": "Identification of the production location of the grower at which the crop is grown"
+        },
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions about the location for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "cultivationSection": {
+      "type": "object",
+      "description": "All relevant cultivation (materials) data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "additionalQuestions"
+      ],
+      "properties": {
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions about the used cultivation materials for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "cropProtectionSection": {
+      "type": "object",
+      "description": "All relevant crop protection data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "cropProtectionApplications"
+      ],
+      "properties": {
+        "cropProtectionApplications": {
+          "type": "array",
+          "description": "List of applied crop protection products the footprint is based on.",
+          "items": {
+            "type": "ref",
+            "ref": "#cropProtectionApplication"
+          }
+        }
+      }
+    },
+    "fertilizerSection": {
+      "type": "object",
+      "description": "All relevant fertilizer data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "fertilizerApplications",
+        "additionalQuestions"
+      ],
+      "properties": {
+        "fertilizerApplications": {
+          "type": "array",
+          "description": "List of (synthetic and organic) fertilizers the footprint is based on.",
+          "items": {
+            "type": "ref",
+            "ref": "#fertilizerApplication"
+          }
+        },
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions on fertilizer application for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "energySection": {
+      "type": "object",
+      "description": "All relevant energy production and consumption as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "energyProductionAndConsumption",
+        "additionalQuestions"
+      ],
+      "properties": {
+        "energyProductionAndConsumption": {
+          "type": "array",
+          "description": "List of energy production and consumption per type the footprint is based on.",
+          "items": {
+            "type": "ref",
+            "ref": "#energyProductionAndConsumption"
+          }
+        },
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions on energy production and consumption for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "waterConsumptionSection": {
+      "type": "object",
+      "description": "All relevant water consumption data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "waterConsumptions",
+        "additionalQuestions"
+      ],
+      "properties": {
+        "waterConsumptions": {
+          "type": "array",
+          "description": "List of water consumptions per type the footprint is based on.",
+          "items": {
+            "type": "ref",
+            "ref": "#waterConsumption"
+          }
+        },
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions on water consumption for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "wasteSection": {
+      "type": "object",
+      "description": "All relevant waste data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "additionalQuestions"
+      ],
+      "properties": {
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions about waste for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "distributionSection": {
+      "type": "object",
+      "description": "All relevant distribution data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "additionalQuestions"
+      ],
+      "properties": {
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions about distribution for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "additionalProductSection": {
+      "type": "object",
+      "description": "All relevant additional product consumption data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "additionalProductApplications",
+        "additionalQuestions"
+      ],
+      "properties": {
+        "additionalProductApplications": {
+          "type": "array",
+          "description": "List of additional product applications per type the footprint is based on.",
+          "items": {
+            "type": "ref",
+            "ref": "#additionalProductApplication"
+          }
+        },
+        "additionalQuestions": {
+          "type": "array",
+          "description": "Additional questions for PefCR footprint calculation",
+          "items": {
+            "type": "ref",
+            "ref": "#characteristicType"
+          }
+        }
+      }
+    },
+    "cropProtectionApplication": {
+      "type": "object",
+      "description": "All relevant crop protection application data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "product",
+        "quantity",
+        "substances"
+      ],
+      "properties": {
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails",
+          "description": "Details of the applied crop protection product"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Total quantity of the applied crop protection products for a crop for a year by a grower"
+        },
+        "substances": {
+          "type": "array",
+          "description": "List of total quantities of the applied active substances of this product for a crop for a year by a grower",
+          "items": {
+            "type": "object",
+            "description": "Total quantity of the applied active substance for a crop for a year by a grower",
+            "required": [
+              "substance",
+              "quantity"
+            ],
+            "properties": {
+              "substance": {
+                "type": "ref",
+                "ref": "#substanceDetails",
+                "description": "Details of the applied substance"
+              },
+              "quantity": {
+                "type": "ref",
+                "ref": "#measureType",
+                "description": "Total quantity of the applied crop protection products for a crop for a year by a grower"
+              }
+            }
+          }
+        }
+      }
+    },
+    "fertilizerApplication": {
+      "type": "object",
+      "description": "All relevant synthetic fertilizer data as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "product",
+        "fertilizerType",
+        "quantity"
+      ],
+      "properties": {
+        "product": {
+          "type": "ref",
+          "ref": "#productDetails",
+          "description": "Information of the applied fertilizer product"
+        },
+        "fertilizerType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Type of the applied fertilizer product (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Total quantity of the applied fertilizer for a crop for a year by a grower"
+        },
+        "nutrients": {
+          "type": "array",
+          "description": "List of total quantities of the applied nutrients of this product for a crop for a year by a grower",
+          "items": {
+            "type": "object",
+            "description": "Total quantity of the applied nutrient for a crop for a year by a grower",
+            "required": [
+              "nutrient",
+              "quantity"
+            ],
+            "properties": {
+              "nutrient": {
+                "type": "ref",
+                "ref": "#nutrientDetails",
+                "description": "Details of the applied nutrient"
+              },
+              "quantity": {
+                "type": "ref",
+                "ref": "#measureType",
+                "description": "Total quantity of the applied nutrient of this product for a crop for a year by a grower"
+              }
+            }
+          }
+        }
+      }
+    },
+    "energyProductionAndConsumption": {
+      "type": "object",
+      "description": "All relevant the energy production and consumption data per type as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "energyType",
+        "quantity"
+      ],
+      "properties": {
+        "energyType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Type of the produced and consumed energy. Codelist id cl902 (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Total quantity of the type of produced and consumed energy for a crop for a year by a grower"
+        }
+      }
+    },
+    "waterConsumption": {
+      "type": "object",
+      "description": "All relevant the water consumption data per type as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "waterConsumptionType",
+        "quantity"
+      ],
+      "properties": {
+        "waterConsumptionType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Type of the applied water according to codelist nl.agroconnect.codelist.cl060 (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Total quantity of the type of water used for a crop for a year by a grower"
+        }
+      }
+    },
+    "additionalProductApplication": {
+      "type": "object",
+      "description": "All relevant the additional product application data per type as part of the PefCR calculation for one crop of one grower in one year",
+      "required": [
+        "additionalProductType",
+        "quantity"
+      ],
+      "properties": {
+        "additionalProductType": {
+          "type": "ref",
+          "ref": "#codeType",
+          "description": "Type of the applied additional product according to codelist nl.agroconnect.codelist.cl060 (OpenAPI property name: 'type')"
+        },
+        "quantity": {
+          "type": "ref",
+          "ref": "#measureType",
+          "description": "Total quantity of the additional product used for a crop for a year by a grower"
         }
       }
     },

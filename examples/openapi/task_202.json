@@ -13,6 +13,7 @@
   "startDateTime": "2025-03-12T15:51:00+01:00",
   "endDateTime": "2025-03-12T16:45:00+01:00",
   "status": "COMPLETED",
+  "note": "Sprayed in calm weather (wind force 2).",
   "operations": [
     {
       "thirdPartyIds": [
@@ -33,6 +34,7 @@
         "listId": "nl.agroconnect.codelist.cl302"
       },
       "status": "COMPLETED",
+      "note": "Boom sprayer with low-drift nozzles.",
       "area": {
         "content": 25000,
         "unitCode": {
@@ -51,7 +53,7 @@
           "name": "Movento",
           "type": {
             "content": "PROTEC",
-            "listId": "nl.agroconnect.codelist.cl127"
+            "listId": "nl.agroconnect.codelist.cl271"
           },
           "quantity": {
             "content": 1200,

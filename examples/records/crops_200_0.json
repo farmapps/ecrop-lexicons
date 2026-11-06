@@ -12,7 +12,7 @@
   "year": 2025,
   "country": {
     "content": "NL",
-    "listId": "iso.3166-1.alpha2"
+    "listId": "com.iso.3166-1.alpha2"
   },
   "region": "string",
   "useTitle": {
@@ -52,8 +52,14 @@
   "plantSpecies": [
     {
       "scaleFactor": 0,
-      "species": "1010101",
-      "variety": "01201"
+      "species": {
+        "content": "1010101",
+        "listId": "nl.agroconnect.codelist.cl263"
+      },
+      "variety": {
+        "content": "01201",
+        "listId": "nl.agroconnect.codelist.cl232"
+      }
     }
   ],
   "plots": [

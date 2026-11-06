@@ -45,6 +45,10 @@
               "type": "ref",
               "ref": "nl.agroconnect.ecrop.defs#operationDetails"
             }
+          },
+          "note": {
+            "type": "string",
+            "description": "Optional free-text note about the task."
           }
         }
       }

@@ -1,0 +1,114 @@
+{
+  "lexicon": 1,
+  "id": "nl.agroconnect.ecrop.footprintDeclaration",
+  "defs": {
+    "main": {
+      "type": "record",
+      "description": "All relevant data for PefCR calculation for one crop at one production location of one grower in one period",
+      "key": "tid",
+      "record": {
+        "type": "object",
+        "required": [
+          "declarationId",
+          "sequenceNumber",
+          "versionNumber",
+          "startDate",
+          "endDate",
+          "grower",
+          "cropSection",
+          "locationSection",
+          "cultivationSection",
+          "cropProtectionSection",
+          "fertilizerSection",
+          "energySection",
+          "waterConsumptionSection",
+          "wasteSection",
+          "distributionSection",
+          "additionalProductSection"
+        ],
+        "properties": {
+          "declarationId": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#idType",
+            "description": "Identification of the footprint declaration as assigned by the data provider. (OpenAPI property name: 'id')"
+          },
+          "sequenceNumber": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#posInt32Type",
+            "description": "Sequence number of the footprint declaration. Grower-identification, year and sequence number uniquely identify a footprint declaration (which can have multiple versions)."
+          },
+          "versionNumber": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#posInt32Type",
+            "description": "Version number of the footprint declaration. A footprint declaration, identified by grower, year and sequence number, can have multiple versions; the highest version number is the most recent."
+          },
+          "versionDateTime": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateTimeType",
+            "description": "Date-time of publication of the footprint declaration."
+          },
+          "thirdPartyIds": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#thirdPartyIdsType",
+            "description": "Third party identifications of the footprint declaration."
+          },
+          "startDate": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "Start date of the period the footprint declaration applies to"
+          },
+          "endDate": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#dateType",
+            "description": "End date of the period the footprint declaration applies to"
+          },
+          "grower": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#growerDetails",
+            "description": "The grower who is owner of the crop the footprint is calculated on"
+          },
+          "cropSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#cropSection"
+          },
+          "locationSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#locationSection"
+          },
+          "cultivationSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#cultivationSection"
+          },
+          "cropProtectionSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#cropProtectionSection"
+          },
+          "fertilizerSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#fertilizerSection"
+          },
+          "energySection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#energySection"
+          },
+          "waterConsumptionSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#waterConsumptionSection"
+          },
+          "wasteSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#wasteSection"
+          },
+          "distributionSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#distributionSection"
+          },
+          "additionalProductSection": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#additionalProductSection"
+          }
+        }
+      }
+    }
+  }
+}

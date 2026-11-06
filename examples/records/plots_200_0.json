@@ -29,5 +29,13 @@
   "regulatorySoilType": {
     "content": "CLAY",
     "listId": "nl.agroconnect.codelist.cl405"
+  },
+  "country": {
+    "content": "NL",
+    "listId": "com.iso.3166-1.alpha2"
+  },
+  "landUseCategory": {
+    "content": "ARL",
+    "listId": "nl.agroconnect.codelist.cl961"
   }
 }

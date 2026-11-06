@@ -3,7 +3,7 @@ servers:
   - url: 'https://standard-api.agroconnect.nl/ecrop/v1'
     description: Agroconnect Virtual API server
 info:
-  description: "## eCrop API based on **AgroConnect eCrop standard version 1.0.2**\r\n\r\nThis API concerns registration of crop related activities like application of crop protection products and fertilizers and energy and water consumption.\r\n\r\nThis API is based on the [AgroConnect eCrop class model]()\r\n\r\n## Conformation\r\nThis API definition follows the rules of the [AgroConnect AGRI API Style Guide](https://github.com/AgroConnectNL/API-Style-Guide/blob/main/API%20Style%20Guide%20Documentation/AGRI%20API%20Style%20Guide.md)\r\n\r\n## Design decisions\r\n- super/subtypes (UML generalisations): subtypes are allOf with $ref to supertype and subtype-object with subtype atributes\r\n- UML compositions: hierachy in URI (should be aggegrations in eCrop class model) or array in master-object\r\n- each **resource** which has operations defined on it, has a server side assiged identification named {**id**} (type idType (content+schemeId))\r\n- each **schema** has a a list of client side assiged identifications named **{thirdPartyIds}** (array type with content+schemeId attributes)\r\n- pagination of collection (list) GET operations follows the [Logius API pagination standard](https://logius-standaarden.github.io/API-mod-pagination/), which defines two methods, an operation MUST use exactly one: page-number (*page*/*pageSize*) or cursor (*cursor*/*limit*). Both are available as reusable parameters in *components/parameters*, so implementors extending this API can pick whichever fits a given (future) collection. Currently: the business list operations (*growers*, *suppliers*, *contractors*, *production-locations*, *plots*, *crops*) use page-number pagination (bounded/static master-data collections), while the *plot-geometry* (OGC API Features) operations use cursor-style pagination (*limit* query parameter with opaque continuation via the *next* relation), per the OGC API Features convention. Business list responses convey adjacent-page navigation via the RFC 8288 *Link* response header, e.g. `<.../growers?page=1&pageSize=20>; rel=\"first\", <.../growers?page=3&pageSize=20>; rel=\"next\", <.../growers?page=1&pageSize=20>; rel=\"prev\"`. Plot-geometry (FeatureCollection) responses instead convey adjacent-page navigation via the *links* array in the response body (rel=next/prev), per OGC API - Features - Part 1: Core; on those responses the *Link* header is reserved for the JSON-FG profile relation, e.g. `<http://www.opengis.net/def/profile/OGC/0/jsonfg>; rel=\"profile\"`\r\n\r\n## Release notes\r\nSee the [changelog](https://github.com/AgroConnectNL/eCrop/blob/main/CHANGELOG.md) for the release notes of each version.\r\n\r\nCopyright (c) AgroConnect 2026"
+  description: "## eCrop API based on the **AgroConnect eCrop standard**\r\n\r\nThis API concerns registration of crop related activities like application of crop protection products and fertilizers and energy and water consumption.\r\n\r\n## Conformation\r\nThis API definition follows the rules of the [AgroConnect AGRI API Style Guide](https://github.com/AgroConnectNL/API-Style-Guide/blob/main/API%20Style%20Guide%20Documentation/AGRI%20API%20Style%20Guide.md)\r\n\r\nThis API definition is based on the [AgroConnect eCrop model version 1.1.1](https://www.agroconnect.nl/Portals/10/EnterpriseArchitect/eCrop_json/eCrop_v1.1.1/index.html)\r\n\r\n## Design decisions\r\nThe general principles by which the eCrop class model is transferred to this OpenAPI definition are described in the [design decisions](https://github.com/AgroConnectNL/eCrop/blob/main/openapi/design-decisions.md).\r\n\r\n## Release notes\r\nSee the [changelog](https://github.com/AgroConnectNL/eCrop/blob/main/CHANGELOG.md) for the release notes of each version.\r\n\r\nCopyright (c) AgroConnect 2026"
   version: 1.1.0
   title: AgroConnect eCrop API
   contact:
@@ -15,8 +15,8 @@ info:
     url: 'https://creativecommons.org/licenses/by/4.0/'
   termsOfService: ''
 externalDocs:
-  description: Agroconnect eCrop class model version 1.0.2.
-  url: 'https://www.agroconnect.nl/Portals/10/EnterpriseArchitect/eCrop_json/eCrop_v1.0.2/index.html'
+  description: AgroConnect eCrop repository (specification, documentation and business cases).
+  url: 'https://github.com/AgroConnectNL/eCrop'
 tags:
   - name: general
     description: General Operations
@@ -36,6 +36,8 @@ tags:
     description: "**Plot level registration Operations**\r\n\r\n These operations can be used to register (non-crop related-) tasks and operations on **plot** level"
   - name: crop level registration
     description: "**Crop level registration Operations**\r\n\r\n These operations can be used to register **crop related** tasks and operations"
+  - name: footprint
+    description: "**PefCR Footprint reporting Operations**\r\n\r\n These operations can be used to report and retrieve footprint information according to the PefCR standard."
 paths:
   /health:
     parameters:
@@ -1382,9 +1384,45 @@ paths:
           $ref: '#/components/responses/default_500'
         default:
           $ref: '#/components/responses/default_error'
+  /footprint-declarations:
+    parameters:
+      - $ref: '#/components/parameters/Major-Version'
+      - $ref: '#/components/parameters/User-Agent'
+    get:
+      tags:
+        - footprint
+      summary: Get all footprint declarations of all growers for which the client is authorized
+      operationId: get-footprint-declarations
+      x-usecases: [footprint-calculation]
+      description: |
+        Returns a list of yearly footprint declarations of all growers whose data are publishable and for which the requesting client is authorized. When the *year* parameter is given, only declarations whose period (*startDate* - *endDate*) falls in that year are returned.
+      parameters:
+        - $ref: '#/components/parameters/page'
+        - $ref: '#/components/parameters/pageSize'
+        - name: year
+          description: Year the footprint declaration concerns
+          in: query
+          schema:
+            type: integer
+            format: int32
+            minimum: 2020
+            maximum: 2050
+            example: 2025
+      responses:
+        '200':
+          $ref: '#/components/responses/footprintdeclarations_200'
+        '400':
+          $ref: '#/components/responses/default_400'
+        '401':
+          $ref: '#/components/responses/default_401'
+        '500':
+          $ref: '#/components/responses/default_500'
+        default:
+          $ref: '#/components/responses/default_error'
 components:
   schemas:
     ##########################################################################
+    # Primary Data Types (PDT)                                               #
     # - NsidType                                                             #
     # - YearType                                                             #
     # - TimeType                                                             #
@@ -1392,7 +1430,6 @@ components:
     # - DateType                                                             #
     # - PosInt64                                                             #
     # - PosInt32                                                             #
-    # Primary Data Types (PDT)                                               #
     ##########################################################################
     PosInt32Type:
       type: number
@@ -1437,10 +1474,10 @@ components:
       description: Year with RFC 9557 (prev. RFC 3339)/ISO-8601 standard date format "YYYY"
       example: '2025'
     NsidType:
-      title: 'Namespace Identifier (NSID) Type used in the AT Protocol for decentralized identities, structured using reverse domain name syntax'
+      title: 'Namespace Identifier (NSID)'
       type: string
       pattern: '^[a-zA-Z]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(\.[a-zA-Z]([a-zA-Z0-9]{0,62})?)$'
-      description: Namespace Identifier (NSID)
+      description: Namespace Identifier (NSID) Type used in the AT Protocol for decentralized identities, structured using reverse domain name syntax
       example: nl.agroconnect.codelist.cl020
     ##########################################################################
     # (Un)qualified Data Types (UDT/QDT)                                     #
@@ -1816,9 +1853,7 @@ components:
       description: Generic type for physical addresses
       type: object
       required:
-        - postalCode
         - cityName
-        - country
       #- postalBoxId
       properties:
         postalCode:
@@ -2129,7 +2164,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/PartyDetails'
     ProductionLocation:
-      title: ProductionLocation
+      title: Production location
       description: The the entity that is responsible for cultivation the crops.
       allOf:
         - $ref: '#/components/schemas/PrimaryId'
@@ -2236,22 +2271,23 @@ components:
               items:
                 $ref: '#/components/schemas/Plot'
     PlantSpecies:
-      title: Plantspecies
+      title: Plant species
       type: object
       description: |-
         Crop type at the level of potato, sugar beet, onion, winter wheat, etc.
         For mixed crops more then one type of crop can be grown in the same period at the same plot.
       required:
         - species
-        - variety
       properties:
         species:
           description: 'Code of the plant species, at the aggregation level of potato, sugar beet, onion, etc. For eCrop in The Netherlands, code list nl.cl263 is used for crop species.'
-          type: string
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
         variety:
           description: Identification of the variety of the type of crop that is grown. For eCrop in The Netherlands code list nl.cl232 is used.
-          type: string
-        precentageMix:
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
+        percentageInMix:
           description: To be used in case of a mixed crop. Indicator of the percentage of this crop species related to the other crop species that are part of this mixed crop. The percentage is based on the weight proportions of the seed of each of the species that are part of the mixed crop.
           type: number
           format: float
@@ -2276,6 +2312,7 @@ components:
           required:
             - type
             - area
+            - regulatorySoilType
           properties:
             type:
               $ref: '#/components/schemas/PlotType'
@@ -2295,10 +2332,24 @@ components:
               description: "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\r\nFor eCrop in The Netherlands code list nl.cl405 is used."
               allOf:
                 - $ref: '#/components/schemas/CodeType'
+            alternativeName:
+              type: string
+              description: "Option to include a second, alternative, name for the plot.\r\nFor instance to be used to include the name the farmer registered in his FMIS and the name that is registered in the RVO-database."
+            region:
+              type: string
+              description: The region the plot is located in.
+            country:
+              description: The country the plot is located in.
+              allOf:
+                - $ref: '#/components/schemas/CountryCodeType'
+            landUseCategory:
+              description: "The land use category of this plot.\r\nCode list: nl.agroconnect.codelist.cl961. Possible values: ARL (Arable Land), GRL (Grassland), FLL (Fallow Land) and NTA (Natural Area)."
+              allOf:
+                - $ref: '#/components/schemas/CodeType'
             greenhouseLocation:
               $ref: '#/components/schemas/GreenhouseLocationDetails'
     GreenhouseLocationDetails:
-      title: Greenhouselocation details
+      title: Greenhouse location details
       description: Structure with transparent walls and roof designed to regulate temperature and humidity for growing plants.
       type: object
       required:
@@ -2663,6 +2714,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/OperationDetails'
+        note:
+          type: string
+          description: Optional free-text note about the task.
     OperationDetails:
       title: Operation details
       type: object
@@ -2673,6 +2727,7 @@ components:
         - thirdPartyIds
         - name
         - startDateTime
+        - type
         - status
       properties:
         thirdPartyIds:
@@ -2728,7 +2783,10 @@ components:
           type: array
           description: The option to attach one or more workers assigned to execute this operation.
           items:
-            $ref: '#/components/schemas/WorkAssignment'
+            $ref: '#/components/schemas/WorkerAssignment'
+        note:
+          type: string
+          description: Optional free-text note about the operation.
     AllocationDetails:
       title: Allocation details
       type: object
@@ -2747,7 +2805,7 @@ components:
           description: Short name for this allocation.
           type: string
         type:
-          description: "Indicator for the type of input or output that is used or delivered by this operation. For instance: \r\n- \"FERTIL\" = fertilizer\r\n- \"PROTEC\" = crop protection product\r\n- \"ENERG\" = energy, etc. \r\nFor this AgroConnect code list nl.cl271 is used."
+          description: "Indicator for the type of input or output that is used or delivered by this operation. For instance: \r\n- \"FERTIL\" = fertilizer\r\n- \"PROTEC\" = crop protection product\r\n- \"ENERG\" = energy, etc. \r\nFor this AgroConnect code list nl.agroconnect.codelist.cl271 is used."
           allOf:
             - $ref: '#/components/schemas/CodeType'
         quantity:
@@ -2762,8 +2820,17 @@ components:
           description: Product used as allocation in this operation
           allOf:
             - $ref: '#/components/schemas/ProductDetails'
+        greenhouseLocation:
+          description: The greenhouse location the allocation applies to (optional).
+          allOf:
+            - $ref: '#/components/schemas/GreenhouseLocationDetails'
+        plantSpecies:
+          type: array
+          description: The plant species the allocation applies to, for instance the species that is planted or sown (optional).
+          items:
+            $ref: '#/components/schemas/PlantSpecies'
     InputAllocationDetails:
-      title: Inputallocation details
+      title: Input allocation details
       description: |-
         One or more inputs used to execute this operation.
         Examples of types of input are: crop protection products, fertilizer, water, energy, labor, etc.
@@ -2775,8 +2842,35 @@ components:
           properties:
             treatmentzone:
               $ref: '#/components/schemas/TreatmentZoneDetails'
+            reason:
+              type: string
+              description: Short description of the reason why this particular input (e.g. this crop protection product) is used.
+            components:
+              type: array
+              description: 'Specification of the mixed content (mixture of several components) of the input, for instance a fertilizer.'
+              items:
+                $ref: '#/components/schemas/ComponentDetails'
+    ComponentDetails:
+      title: Component details
+      type: object
+      description: 'Specification of one component of the mixed content of a product, for instance a fertilizer.'
+      required:
+        - code
+        - quantity
+      properties:
+        code:
+          description: "Identification of the component of the composed product.\r\nCode list: nl.agroconnect.codelist.cl363"
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
+        name:
+          type: string
+          description: Name of the component of the composed product.
+        quantity:
+          description: "Specification of the quantity of this component as part of the composed product.\r\nCould be in terms of a percentage or in terms of a dimension; for instance gram/kilogram or milliliter per liter."
+          allOf:
+            - $ref: '#/components/schemas/MeasureType'
     OutputAllocationDetails:
-      title: Outputallocation details
+      title: Output allocation details
       description: |-
         One or more outputs as the result of the execution of the operation.
         For example harvested produce: potatoes, onions, flowers, vegetables, etc.
@@ -2790,7 +2884,7 @@ components:
             treatmentzone:
               $ref: '#/components/schemas/TreatmentZoneDetails'
     TreatmentZoneDetails:
-      title: Treatmentzone details
+      title: Treatment zone details
       description: Part of the plot which is treated in an operation
       type: object
       required:
@@ -2806,6 +2900,12 @@ components:
             $ref: '#/components/schemas/CharacteristicType'
         area:
           $ref: '#/components/schemas/MeasureType'
+        startLocation:
+          type: string
+          description: "Specification of the beginning of the treatment zone.\r\nFor instance an identifier of a bed of Tulips in an open field."
+        endLocation:
+          type: string
+          description: "Specification of the end of the treatment zone.\r\nFor instance an identifier of a bed of Tulips in an open field."
     InboundDeliveryByGrower:
       title: Inbound Delivery by Grower
       description: |
@@ -2814,7 +2914,7 @@ components:
         a supplier.
       allOf:
         - $ref: '#/components/schemas/PrimaryId'
-        - $ref: '#/components/schemas/InboundDeliveryDetailsGrower'
+        - $ref: '#/components/schemas/InboundDeliveryDetailsByGrower'
     InboundDeliveryBySupplier:
       title: Inbound Delivery by Supplier
       description: |
@@ -2824,7 +2924,7 @@ components:
       allOf:
         - $ref: '#/components/schemas/PrimaryId'
         - $ref: '#/components/schemas/InboundDeliveryDetails'
-    InboundDeliveryDetailsGrower:
+    InboundDeliveryDetailsByGrower:
       title: Inbound Delivery details by a Grower
       description: |
         Details of the materials and inputs delivered by a supplier to a grower as input for their crop process. An inbound
@@ -2912,13 +3012,13 @@ components:
           - content: 13404 N
             schemeId: nl.ctgb.codelist.toelatingsnummer
         name: Movento 100 SC - 1L - spirotetramat
-    EquipmentDetail:
-      title: Equipment detail
+    EquipmentDetails:
+      title: Equipment details
       type: object
       description: 'Details of equipment used to support farming activities, such as tractors, implements, sensor systems, installations, or hand tools.'
       required:
         - thirdPartyIds
-        - type
+        - name
       properties:
         thirdPartyIds:
           allOf:
@@ -2928,33 +3028,28 @@ components:
           type: string
           description: Name of the equipment
         type:
-          type: string
-          description: Type of equipment
-          enum:
-            - Tractor
-            - Implement
-            - Sensorsystem
-            - Installation
-            - Handtool
+          description: "Type of equipment, for instance Tractor, ImplementAssembly, SensorSystem, Installation or HandTool.\r\nCode list: nl.agroconnect.codelist.cl962"
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
       example:
         thirdPartyIds:
           - content: '8922'
             schemeId: com.iperen.codelist.artikelnummer
         name: John Deere 6120M
-        type: Tractor
+        type:
+          content: Tractor
+          listId: nl.agroconnect.codelist.cl962
     EquipmentAssignment:
       title: Equipment assignment
       type: object
       description: 'Identifies a piece of equipment that is used in a certain operation, and the period and usage figures of that use.'
       required:
         - equipment
-        - startDateTime
-        - endDateTime
       properties:
         equipment:
           description: The equipment assigned to and used in the operation.
           allOf:
-            - $ref: '#/components/schemas/EquipmentDetail'
+            - $ref: '#/components/schemas/EquipmentDetails'
         startDateTime:
           description: The date/timestamp the equipment started being used in the operation.
           allOf:
@@ -2963,7 +3058,7 @@ components:
           description: The date/timestamp the equipment stopped being used in the operation.
           allOf:
             - $ref: '#/components/schemas/DateTimeType'
-        time:
+        executionTime:
           description: The total time the equipment was in use during the operation (e.g. working hours or engine hours).
           allOf:
             - $ref: '#/components/schemas/MeasureType'
@@ -2977,10 +3072,12 @@ components:
             - content: '1234'
               schemeId: com.my-mps.codelist.registratienummer
           name: John Deere 6120M
-          type: Tractor
+          type:
+            content: Tractor
+            listId: nl.agroconnect.codelist.cl962
         startDateTime: '2025-03-12T15:51:00+01:00'
         endDateTime: '2025-03-12T16:45:00+01:00'
-        time:
+        executionTime:
           content: 0.9
           unitCode:
             content: HUR
@@ -2990,51 +3087,49 @@ components:
           unitCode:
             content: KMT
             listId: nl.agroconnect.codelist.cl020
-    Worker:
-      title: Worker
+    WorkerDetails:
+      title: Worker details
       type: object
-      description: 'A person that performs (part of) an operation, e.g. a farm employee or contractor.'
+      description: 'Details of a person that performs (part of) an operation, e.g. a farm employee or contractor.'
       required:
-        - id
+        - thirdPartyIds
         - name
       properties:
-        id:
+        thirdPartyIds:
           allOf:
-            - $ref: '#/components/schemas/IdType'
-          description: Identifier of the worker.
+            - $ref: '#/components/schemas/ThirdPartyIdsType'
+          description: 'List of alternative identifiers (\"AKA, also-know-as\") with which the worker is identified by third parties, e.g. an employee number'
         name:
           type: string
           description: Name of the worker.
         phoneNumber:
           type: string
           description: Phone number of the worker.
-        email:
+        eMail:
           type: string
           description: E-mail address of the worker.
         jobTitle:
           type: string
           description: Job title of the worker.
       example:
-        id:
-          content: '4821'
-          schemeId: com.my-mps.codelist.medewerkernummer
+        thirdPartyIds:
+          - content: '4821'
+            schemeId: com.my-mps.codelist.medewerkernummer
         name: Jan Jansen
         phoneNumber: +31(0)6 12345678
-        email: jan.jansen@example.com
+        eMail: jan.jansen@example.com
         jobTitle: Machine operator
-    WorkAssignment:
-      title: Work assignment
+    WorkerAssignment:
+      title: Worker assignment
       type: object
       description: 'Identifies a worker that is assigned to a certain operation, and the period and execution time of that assignment.'
       required:
         - worker
-        - startDateTime
-        - endDateTime
       properties:
         worker:
           description: The worker assigned to the operation.
           allOf:
-            - $ref: '#/components/schemas/Worker'
+            - $ref: '#/components/schemas/WorkerDetails'
         startDateTime:
           description: The date/timestamp the worker started working on the operation.
           allOf:
@@ -3049,9 +3144,9 @@ components:
             - $ref: '#/components/schemas/MeasureType'
       example:
         worker:
-          id:
-            content: '4821'
-            schemeId: com.my-mps.codelist.medewerkernummer
+          thirdPartyIds:
+            - content: '4821'
+              schemeId: com.my-mps.codelist.medewerkernummer
           name: Jan Jansen
           jobTitle: Machine operator
         startDateTime: '2025-03-12T15:51:00+01:00'
@@ -3061,6 +3156,1495 @@ components:
           unitCode:
             content: HUR
             listId: nl.agroconnect.codelist.cl020
+    SubstanceDetails:
+      title: Substance details
+      type: object
+      description: 'Details of an active substance used in a crop protection product.'
+      required:
+        - thirdPartyIds
+      properties:
+        thirdPartyIds:
+          allOf:
+            - $ref: '#/components/schemas/ThirdPartyIdsType'
+          description: 'List of alternative identifiers (\"AKA, also-know-as\") with which the substance is identified by third parties, e.g. CAS (Chemical Abstracts Service) number, EC (European Community) number  '''
+        name:
+          type: string
+          description: Name of the substance
+        additionalProductProperties:
+          description: List of additional substance characteristics
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+    NutrientDetails:
+      title: Nutrient details
+      type: object
+      description: 'Details of an nutrient used in a fertilizer product.'
+      required:
+        - thirdPartyIds
+      properties:
+        thirdPartyIds:
+          allOf:
+            - $ref: '#/components/schemas/ThirdPartyIdsType'
+          description: 'List of alternative identifiers (\"AKA, also-know-as\") with which the nutrient is identified by third parties'
+        name:
+          type: string
+          description: Name of the nutrient
+        additionalProductProperties:
+          description: List of additional nutrient characteristics
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+    FootprintDeclaration:
+      title: Footprint Declaration
+      type: object
+      description: All relevant data for PefCR calculation for one crop at one production location of one grower in one period
+      required:
+        - id
+        - sequenceNumber
+        - versionNumber
+        - startDate
+        - endDate
+        - grower
+        - cropSection
+        - locationSection
+        - cultivationSection
+        - cropProtectionSection
+        - fertilizerSection
+        - energySection
+        - waterConsumptionSection
+        - wasteSection
+        - distributionSection
+        - additionalProductSection
+      properties:
+        # General section
+        id: 
+          allOf:
+            - $ref:  '#/components/schemas/IdType'
+          description: 'Identification of the footprint declaration as assigned by the data provider.'
+        sequenceNumber:
+          allOf:
+            - $ref: '#/components/schemas/PosInt32Type'
+          description: 'Sequence number of the footprint declaration. Grower-identification, year and sequence number uniquely identify a footprint declaration (which can have multiple versions).'
+        versionNumber:
+          allOf:
+            - $ref: '#/components/schemas/PosInt32Type'
+          description: 'Version number of the footprint declaration. A footprint declaration, identified by grower, year and sequence number, can have multiple versions; the highest version number is the most recent.'
+        versionDateTime:  
+          allOf:
+            - $ref: '#/components/schemas/DateTimeType'
+          description: 'Date-time of publication of the footprint declaration.'
+        thirdPartyIds:
+          allOf:
+            - $ref: '#/components/schemas/ThirdPartyIdsType'
+          description: 'Third party identifications of the footprint declaration.'
+        startDate:
+          allOf:
+            - $ref: '#/components/schemas/DateType'
+          description: 'Start date of the period the footprint declaration applies to'
+        endDate:
+          allOf:
+            - $ref: '#/components/schemas/DateType'
+          description: 'End date of the period the footprint declaration applies to'
+        grower:
+          allOf:
+            - $ref: '#/components/schemas/GrowerDetails'
+          description: 'The grower who is owner of the crop the footprint is calculated on'
+        # Crop section
+        cropSection:
+          $ref: '#/components/schemas/CropSection'
+        # Location section 
+        locationSection:
+          $ref: '#/components/schemas/LocationSection'
+        # Cultivation materials section
+        cultivationSection:
+          $ref: '#/components/schemas/CultivationSection'
+        # Crop protection application section
+        cropProtectionSection:
+          $ref: '#/components/schemas/CropProtectionSection'
+        # Fertilizer application section (synthetic and organic)
+        fertilizerSection:
+          $ref: '#/components/schemas/FertilizerSection'
+        # Energy consumption and production section
+        energySection:
+          $ref: '#/components/schemas/EnergySection'
+        # Water consumption section
+        waterConsumptionSection:
+          $ref: '#/components/schemas/WaterConsumptionSection'
+        # Waste section
+        wasteSection:
+          $ref: '#/components/schemas/WasteSection'
+        # Product Distribution section
+        distributionSection:
+          $ref: '#/components/schemas/DistributionSection'
+        # Additional sections
+        additionalProductSection:
+          $ref: '#/components/schemas/AdditionalProductSection'
+      example:
+        id:
+          content: '2025-0125948-001-002'
+          schemeId: nl.greenlinqdata.codelist.fafnummer
+        sequenceNumber: 1
+        versionNumber: 2
+        versionDateTime: '2025-11-13T15:37:19+01:00'
+        startDate: '2025-01-01'
+        endDate: '2025-12-31'
+        grower:
+          thirdPartyIds:
+            - content: '8711223344452'
+              schemeId: com.gs1.codelist.gln
+          name: 'JSON test BV'
+        cropSection:
+          plantSpecies: 
+            species:
+              content: '2030302'
+              listId: nl.agroconnect.codelist.cl263
+            variety:
+              content: '10000'
+              listId: nl.agroconnect.codelist.cl232
+          additionalQuestions:
+            - code:
+                content: 'CR0010' # Productgroepcodenaam overnemen uit FAF
+                listId: nl.agroconnect.codelist.cl265
+              stringValue: 'Tomaat cherry'
+            - code:
+                content: 'CR0020' # Netto teelt oppervlakte (hectare of m2)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 80000
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0030' # Zaaien of planten
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: '3' 
+                listId: nl.agroconnect.codelist.c300
+            - code:
+                content: 'CR0040' # Zaaien of planten
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: '60600'   # 60xxx Zaaien, 60600 planten
+                listId: nl.agroconnect.codelist.cl127
+            - code:
+                content: 'CR00050' # Aantal planten bij start teelt (aantallen)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 100000
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0060' # Gewicht van plant bij binnenkomst (kg) of totaal kg zaad bij zaaien. 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 1.2
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0070' # Leeftijd plant bij binnenkomst (dagen)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 21
+                unitCode:
+                  content: 'DAY'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0080' # Productie hoeveelheid (kg)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 1000000
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0090' # Verkochte hoeveelheid (kg)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 980000
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0100' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 44
+                unitCode:
+                  content: 'WEEK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'CR0110' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 19
+                unitCode:
+                  content: 'CEL'
+                  listId: nl.agroconnect.codelist.cl020
+        locationSection:
+          location:
+            thirdPartyIds:
+              - content: '8711223344353'
+                schemeId: com.gs1.codelist.gln
+            name: 'Vestiging 1 JSON test BV (TST)'
+          additionalQuestions:
+            - code:
+                content: 'LO0020' # In welk land staat deze vestiging (locatie of locatie's)
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'NL'
+                listId: nl.agroconnect.codelist.cl250
+            - code:
+                content: 'LO0030' # Totaal bedrijfsoppervlakte (incl bijgebouwen, grasranden, parkeerplaats, etc)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 110000
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0040' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 80000
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0050' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10000
+                unitCode:
+                  content: 'MTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0060' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 6.2
+                unitCode:
+                  content: 'MTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0070' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 5
+                unitCode:
+                  content: 'ANN'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0080' 
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'KT0020'
+                listId: nl.agroconnect.codelist.clNNN
+            - code:
+                content: 'LO0090' 
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'KC0020'
+                listId: nl.agroconnect.codelist.clNNN
+            - code:
+                content: 'LO0100' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 78.5
+                unitCode:
+                  content: 'P1'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0110' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 5
+                unitCode:
+                  content: 'P1'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0120' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 100000
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0130' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 5000
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'LO0140' 
+                listId: nl.agroconnect.codelist.cl265
+              booleanValue: false
+            - code:
+                content: 'LO0150' 
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'DG0030'
+                listId: nl.agroconnect.codelist.clNNN
+        cultivationSection:
+          additionalQuestions:
+            - code:
+                content: '15'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '16' 
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '17'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '18'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 1000
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '19'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '20'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '21'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '22'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '23'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '24'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '25'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '26'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: '27'
+                listId: nl.agroconnect.codelist.cl300
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0010' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0020' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 100
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0030' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0030' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0040' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0050' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0060' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 100
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0070' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0080' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0090' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 200
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0100'
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0110' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0120' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10000
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0130' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0030' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0140' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0150' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 40000
+                unitCode:
+                  content: 'MTK'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0160' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10000
+                unitCode:
+                  content: 'MTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0170' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 800
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0180' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10000
+                unitCode:
+                  content: 'MTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0190' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10000
+                unitCode:
+                  content: 'MTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0200' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10000
+                unitCode:
+                  content: 'KGR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0210' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'LTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0220' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 200
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0230' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 200
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'GM0240' 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 200
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+        cropProtectionSection:
+          cropProtectionApplications:
+            - product:
+                thirdPartyIds:
+                  - content: '14855 N'
+                    schemeId: nl.ctgb.codelist.toelatingsnummer
+              quantity:
+                content: 2
+                unitCode:
+                  content: 'LTR'
+                  listId: nl.agroconnect.codelist.cl020
+              substances:
+                - substance:
+                    thirdPartyIds:
+                      - content: '571-58-4'
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 1988
+                    unitCode:
+                      content: 'GRM'
+                      listId: nl.agroconnect.codelist.cl020
+            - product:
+                thirdPartyIds:
+                  - content: '15569 N'
+                    schemeId: nl.ctgb.codelist.toelatingsnummer
+              quantity:
+                content: 5260
+                unitCode:
+                  content: 'LTR'
+                  listId: nl.agroconnect.codelist.cl020
+              substances:
+                - substance:
+                    thirdPartyIds:
+                      - content: '736994-63-1'
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 200
+                    unitCode:
+                      content: 'GRM'
+                      listId: nl.agroconnect.codelist.cl020
+            - product:
+                thirdPartyIds:
+                  - content: '12878 N'
+                    schemeId: nl.ctgb.codelist.toelatingsnummer
+              quantity:
+                content: 2
+                unitCode:
+                  content: 'LTR'
+                  listId: nl.agroconnect.codelist.cl020
+              substances:
+                - substance:
+                    thirdPartyIds:
+                      - content: '104206-82-8'
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 140
+                    unitCode:
+                      content: 'GRM'
+                      listId: nl.agroconnect.codelist.cl020
+                - substance:
+                    thirdPartyIds:
+                      - content: '5915-41-3'
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 660
+                    unitCode:
+                      content: 'GRM'
+                      listId: nl.agroconnect.codelist.cl020
+        fertilizerSection:
+          fertilizerApplications:
+            - product:
+                thirdPartyIds:
+                  - content: '1758'
+                    schemeId: nl.agroconnect.codelist.cl022
+                name: 'ACS-Koper 500'
+              type:
+                content: 'FERTIL' # Synthetic
+                listId: nl.agroconnect.codelist.cl271
+              quantity:
+                content: 4
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+              nutrients: []
+            - product:
+                thirdPartyIds:
+                  - content: '304'
+                    schemeId: nl.agroconnect.codelist.cl022
+                name: 'Baskal'
+              type:
+                content: 'FERTIL' # Synthetic
+                listId: nl.agroconnect.codelist.cl271
+              quantity:
+                content: 4
+                unitCode:
+                  content: 'LTR'
+                  listId: nl.agroconnect.codelist.cl020
+              nutrients: []
+            - product:
+                thirdPartyIds:
+                  - content: '101'
+                    schemeId: nl.agroconnect.codelist.cl022
+                name: 'Blend NL'
+              type:
+                content: 'FERTIL' # Synthetic
+                listId: nl.agroconnect.codelist.cl271
+              quantity:
+                content: 10000
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+              nutrients:
+                - nutrient:
+                    thirdPartyIds:
+                      - content: '7727-37-9'   
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 500
+                    unitCode:
+                      content: 'KGM'
+                      listId: nl.agroconnect.codelist.cl020
+                - nutrient:
+                    thirdPartyIds:
+                      - content: '1314-56-3'
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 436
+                    unitCode:
+                      content: 'KGM'
+                      listId: nl.agroconnect.codelist.cl020
+                - nutrient:
+                    thirdPartyIds:
+                      - content: '12136-45-7' 
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 1660
+                    unitCode:
+                      content: 'KGM'
+                      listId: nl.agroconnect.codelist.cl020
+            - product:
+                thirdPartyIds:
+                  - content: '2549'
+                    schemeId: nl.agroconnect.codelist.cl022
+                name: 'CalciMax'
+              type:
+                content: 'FERTIL' # Synthetic
+                listId: nl.agroconnect.codelist.cl271
+              quantity:
+                content: 4
+                unitCode:
+                  content: 'LTRKGM'
+                  listId: nl.agroconnect.codelist.cl020
+              nutrients: []
+            - product:
+                thirdPartyIds:
+                  - content: '932'
+                    schemeId: nl.agroconnect.codelist.cl022
+                name: 'GFT-compost'
+              type:
+                content: 'ORGANIC' # Organic
+                listId: nl.agroconnect.codelist.cl271
+              quantity:
+                content: 2000
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+              nutrients:
+                - nutrient:
+                    thirdPartyIds:
+                      - content: '12136-45-7'   
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 20
+                    unitCode:
+                      content: 'KGM'
+                      listId: nl.agroconnect.codelist.cl020
+                - nutrient:
+                    thirdPartyIds:
+                      - content: '7727-37-9'
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 0
+                    unitCode:
+                      content: 'KGM'
+                      listId: nl.agroconnect.codelist.cl020
+                - nutrient:
+                    thirdPartyIds:
+                      - content: '12136-45-7' 
+                        schemeId: org.cas.codelist.casnumber
+                  quantity:
+                    content: 1660
+                    unitCode:
+                      content: 'KGM'
+                      listId: nl.agroconnect.codelist.cl020
+          additionalQuestions:
+            - code:
+                content: 'FE0010' # Type CO2
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'CO0010'
+                listId: nl.agroconnect.codelist.clNNN
+            - code:
+                content: 'FE0020' # Hoeveelheid (KG) CO2
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 1000
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'FE0030' # Lengte van de leidingen 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 20000
+                unitCode:
+                  content: 'KMT'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'F0040' # Transport
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 200
+                unitCode:
+                  content: 'KMT'
+                  listId: nl.agroconnect.codelist.cl020
+        energySection:
+          energyProductionAndConsumption:
+            - type:
+                content: 'ENET'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 600
+                unitCode:
+                  content: 'KWH'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'SUNGEN'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 9999.99
+                unitCode:
+                  content: 'KWH'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'SUNFEEDIN'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 9999.99
+                unitCode:
+                  content: 'KWH'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'WINDFEEDIN'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 0
+                unitCode:
+                  content: 'KWH'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'GASNET'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 400
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'GASWKK'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 400
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'GASBOIL'
+                listId: nl.agroconnect.codelist.cl902
+              quantity:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+          additionalQuestions:
+            - code:
+                content: 'EN0010' 
+                listId: nl.agroconnect.codelist.cl265
+              stringValue: 'Vattenfall'
+            - code:
+                content: 'EN0020' # Type CO2
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'LIQ'
+                listId: nl.agroconnect.codelist.clNNN
+            - code:
+                content: 'EN0020' # Hoeveelheid (KG) CO2
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 6500
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'EN0030' # Lengte van de leidingen 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 3.52
+                unitCode:
+                  content: 'KMT'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'EN0040' # Transport
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 78
+                unitCode:
+                  content: 'KMT'
+                  listId: nl.agroconnect.codelist.cl020
+        waterConsumptionSection:
+          waterConsumptions:
+            - type:
+                content: 'TAP'
+                listId: nl.agroconnect.codelist.cl060
+              quantity:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'RAIN'
+                listId: nl.agroconnect.codelist.cl060
+              quantity:
+                content: 200000
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: 'DRAIN'
+                listId: nl.agroconnect.codelist.cl060
+              quantity:
+                content: 50000
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:                  
+                content: 'SURFACE'
+                listId: nl.agroconnect.codelist.cl060
+              quantity:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+          additionalQuestions:
+            - code:
+                content: 'WC0010' # Afgevoerd naar oppervlaktewater
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 50
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WC0020' # Afgevoerd naar riolering 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'MTQ'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WC0030' # Nitraatgehalte (NO3) in afgevoerd water 
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10
+                unitCode:
+                  content: 'M33'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WC0040' # Fosforgehalte (P) in afgevoerd water
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 15
+                unitCode:
+                  content: 'M33'
+                  listId: nl.agroconnect.codelist.cl020
+        wasteSection:
+          additionalQuestions:
+            - code:
+                content: 'WA0010' # Hoeveel schoon organisch ?
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WA0020' # Hoeveel papier- & kartonafval wordt er geproduceerd?
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 10
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WA0030' # Hoeveel vervuild organisch afval?  (groenafval met touw en/of gewasclips)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WA0040' # Hoeveel elektronisch afval wordt er geproduceerd?
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 45
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WA0050' # Hoeveel plastic afval wordt er geproduceerd?
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 2600
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WA0060' # Hoeveel restafval (overig) wordt er geproduceerd?
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 1475
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'WA0070' # Hoeveel steenwol-afval wordt er geproduceerd? Dit is inclusief het plastic.
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 6500
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+        distributionSection:
+          additionalQuestions:
+            - code:
+                content: 'DS0010' # Totale afstand per jaar
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 3470
+                unitCode:
+                  content: 'KMT'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'DS0020' # Aantal ritten per jaar
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 125
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'DS0030' # Gemiddeld gewicht per rit
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 14500
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'DS0030' # Gemiddeld gewicht per rit
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 14500
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'DS0030' # Gemiddeld gewicht per rit
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 14500
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'DS0040' # Retourritten (leeg of beladen)
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'EMPTY'
+                listId: nl.agroconnect.codelist.clNNN
+            - code:
+                content: 'DS0050' # Gebruik van gekoeld transport
+                listId: nl.agroconnect.codelist.cl265
+              booleanValue: false
+            - code:
+                content: 'DS0060' # Gekoeld transport temperatuur
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 4.5
+                unitCode:
+                  content: 'CEL'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'DS0070' # Transportmiddel
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'SELF'
+                listId: nl.agroconnect.codelist.clNNN
+            - code:
+                content: 'DS0070' # Type voertuig
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'TRUCK'
+                listId: nl.agroconnect.codelist.clNNN  # transportation types
+            - code:
+                content: 'DS0080' # Fuel type
+                listId: nl.agroconnect.codelist.cl265
+              codeValue:
+                content: 'DSL'
+                listId: nl.agroconnect.codelist.clNNN  # energy type
+            - code:
+                content: 'DS0080' # Gemiddeld verbruik per km (diesel)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 0.32
+                unitCode:
+                  content: 'LTRKMT'
+                  listId: nl.agroconnect.codelist.cl020
+        additionalProductSection:
+          additionalProductApplications:
+            - type:
+                content: '563'
+                listId: nl.agroconnect.codelist.cl034
+              quantity:
+                content: 5
+                unitCode:
+                  content: 'LTR'
+                  listId: nl.agroconnect.codelist.cl020
+            - type:
+                content: '902'
+                listId: nl.agroconnect.codelist.cl034
+              quantity:
+                content: 100
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+          additionalQuestions:
+            - code:
+                content: 'AP0010' # Hogedraadhaken tomaat, met kunststof touw
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 6000
+                unitCode:
+                  content: 'NBR'
+                  listId: nl.agroconnect.codelist.cl020
+            - code:
+                content: 'AP0020' # Los touw, kunststof (kg)
+                listId: nl.agroconnect.codelist.cl265
+              measureValue:
+                content: 200
+                unitCode:
+                  content: 'KGM'
+                  listId: nl.agroconnect.codelist.cl020
+    # sections
+    CropSection:
+      title: Crop section of the Footprint declaration
+      type: object
+      description: All relevant crop data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - plantSpecies
+        - additionalQuestions
+      properties:
+        plantSpecies:
+          allOf:
+            - $ref: '#/components/schemas/PlantSpecies'
+          description: Crop on which the footprint declaration is based.
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: Additional questions about the crop for PefCR footprint calculation
+    LocationSection:
+      title: Location section of the Footprint declaration
+      type: object
+      description: All relevant location data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - location
+        - additionalQuestions
+      properties:
+        location:
+          allOf:
+            - $ref: '#/components/schemas/ProductionLocationDetails'
+          description: Identification of the production location of the grower at which the crop is grown 
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: Additional questions about the location for PefCR footprint calculation
+    CultivationSection:
+      title: Cultivation section of the Footprint declaration
+      type: object
+      description: All relevant cultivation (materials) data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - additionalQuestions
+      properties:
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: 'Additional questions about the used cultivation materials for PefCR footprint calculation'
+    CropProtectionSection:
+      title: Crop protection section of the Footprint declaration
+      type: object
+      description: All relevant crop protection data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - cropProtectionApplications
+      properties:
+        cropProtectionApplications:
+          type: array
+          description: List of applied crop protection products the footprint is based on.
+          items:
+            $ref: '#/components/schemas/CropProtectionApplication'
+    FertilizerSection:
+      title: Fertilizer section of the Footprint declaration
+      type: object
+      description: All relevant fertilizer data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - fertilizerApplications
+        - additionalQuestions
+      properties:
+        fertilizerApplications:
+          type: array
+          description: List of (synthetic and organic) fertilizers the footprint is based on.
+          items:
+            $ref: '#/components/schemas/FertilizerApplication'
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: Additional questions on fertilizer application for PefCR footprint calculation
+    EnergySection:
+      title: Energy production and consumption section of the Footprint declaration
+      type: object
+      description: All relevant energy production and consumption as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - energyProductionAndConsumption
+        - additionalQuestions
+      properties:
+        energyProductionAndConsumption:
+          type: array
+          description: List of energy production and consumption per type the footprint is based on.
+          items:
+            $ref: '#/components/schemas/EnergyProductionAndConsumption'
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: Additional questions on energy production and consumption for PefCR footprint calculation
+    WaterConsumptionSection:
+      title: Water Consumption section of the Footprint declaration
+      type: object
+      description: All relevant water consumption data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - waterConsumptions
+        - additionalQuestions
+      properties:
+        waterConsumptions:
+          type: array
+          description: List of water consumptions per type the footprint is based on.
+          items:
+            $ref: '#/components/schemas/WaterConsumption'
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: Additional questions on water consumption for PefCR footprint calculation
+    WasteSection:
+      title: Waste section of the Footprint declaration
+      type: object
+      description: All relevant waste data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - additionalQuestions
+      properties:
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: 'Additional questions about waste for PefCR footprint calculation'
+    DistributionSection:
+      title: Distribution section of the Footprint declaration
+      type: object
+      description: All relevant distribution data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - additionalQuestions
+      properties:
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: 'Additional questions about distribution for PefCR footprint calculation'
+    AdditionalProductSection:
+      title: Additional product section of the Footprint declaration
+      type: object
+      description: All relevant additional product consumption data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - additionalProductApplications
+        - additionalQuestions
+      properties:
+        additionalProductApplications:
+          type: array
+          description: List of additional product applications per type the footprint is based on.
+          items:
+            $ref: '#/components/schemas/AdditionalProductApplication'
+        additionalQuestions:
+          type: array
+          items:
+            $ref: '#/components/schemas/CharacteristicType'
+          description: 'Additional questions for PefCR footprint calculation'
+    # Specific schemas as part of the sections
+    CropProtectionApplication:
+      title: Summary of applied crop protection products
+      type: object
+      description: All relevant crop protection application data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - product
+        - quantity
+        - substances
+      properties:
+        product:
+          allOf:
+            - $ref: '#/components/schemas/ProductDetails'
+          description: Details of the applied crop protection product
+        quantity:
+          allOf:
+            - $ref: '#/components/schemas/MeasureType'
+          description: Total quantity of the applied crop protection products for a crop for a year by a grower
+        substances:
+          description: List of total quantities of the applied active substances of this product for a crop for a year by a grower
+          type: array
+          items:
+            type: object
+            description: Total quantity of the applied active substance for a crop for a year by a grower
+            required:
+              - substance
+              - quantity
+            properties:
+              substance:
+                allOf:
+                  - $ref: '#/components/schemas/SubstanceDetails'
+                description: Details of the applied substance
+              quantity: 
+                allOf:
+                  - $ref: '#/components/schemas/MeasureType'
+                description: Total quantity of the applied crop protection products for a crop for a year by a grower
+    FertilizerApplication:
+      title: Summary of applied synthetic fertilizer products
+      type: object
+      description: All relevant synthetic fertilizer data as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - product
+        - type
+        - quantity
+      properties:
+        product:
+          allOf:
+            - $ref: '#/components/schemas/ProductDetails'
+          description: Information of the applied fertilizer product
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
+          description: Type of the applied fertilizer product
+        quantity:
+          allOf:
+            - $ref: '#/components/schemas/MeasureType'
+          description: Total quantity of the applied fertilizer for a crop for a year by a grower
+        nutrients:
+          description: List of total quantities of the applied nutrients of this product for a crop for a year by a grower
+          type: array
+          items:
+            type: object
+            description: Total quantity of the applied nutrient for a crop for a year by a grower
+            required:
+              - nutrient
+              - quantity
+            properties:
+              nutrient:
+                allOf:
+                  - $ref: '#/components/schemas/NutrientDetails'
+                description: Details of the applied nutrient
+              quantity: 
+                allOf:
+                  - $ref: '#/components/schemas/MeasureType'
+                description: Total quantity of the applied nutrient of this product for a crop for a year by a grower
+    EnergyProductionAndConsumption:
+      title: Summary of the energy production and consumption per type
+      type: object
+      description: All relevant the energy production and consumption data per type as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - type
+        - quantity
+      properties:
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
+          description: Type of the produced and consumed energy. Codelist id cl902
+        quantity:
+          allOf:
+            - $ref: '#/components/schemas/MeasureType'
+          description: Total quantity of the type of produced and consumed energy for a crop for a year by a grower
+    WaterConsumption:
+      title: Summary of the water consumption per type
+      type: object
+      description: All relevant the water consumption data per type as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - type
+        - quantity
+      properties:
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
+          description: Type of the applied water according to codelist nl.agroconnect.codelist.cl060
+        quantity:
+          allOf:
+            - $ref: '#/components/schemas/MeasureType'
+          description: Total quantity of the type of water used for a crop for a year by a grower
+    AdditionalProductApplication:
+      title: Summary of the additional product application per type
+      type: object
+      description: All relevant the additional product application data per type as part of the PefCR calculation for one crop of one grower in one year
+      required:
+        - type
+        - quantity
+      properties:
+        type:
+          allOf:
+            - $ref: '#/components/schemas/CodeType'
+          description: Type of the applied additional product according to codelist nl.agroconnect.codelist.cl060
+        quantity:
+          allOf:
+            - $ref: '#/components/schemas/MeasureType'
+          description: Total quantity of the additional product used for a crop for a year by a grower
   ##########################################################################
   # Reusable examples                                                      #
   ##########################################################################
@@ -3406,6 +4990,7 @@ components:
         startDateTime: '2025-03-12T15:51:00+01:00'
         endDateTime: '2025-03-12T16:45:00+01:00'
         status: COMPLETED
+        note: Sprayed in calm weather (wind force 2).
         operations:
           - thirdPartyIds:
               - content: 27575-1
@@ -3420,6 +5005,7 @@ components:
               content: SPRAYING
               listId: nl.agroconnect.codelist.cl302
             status: COMPLETED
+            note: Boom sprayer with low-drift nozzles.
             area:
               content: 25000
               unitCode:
@@ -3432,7 +5018,7 @@ components:
                 name: Movento
                 type:
                   content: PROTEC
-                  listId: nl.agroconnect.codelist.cl127
+                  listId: nl.agroconnect.codelist.cl271
                 quantity:
                   content: 1200
                   unitCode:
@@ -3488,6 +5074,12 @@ components:
         regulatorySoilType:
           content: CLAY
           listId: nl.agroconnect.codelist.cl405
+        landUseCategory:
+          content: ARL
+          listId: nl.agroconnect.codelist.cl961
+        country:
+          content: NL
+          listId: com.iso.3166-1.alpha2
         links:
           - rel: 'https://ecrop.agroconnect.nl/rel/plot-features'
             href: 'https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items?plotSchemeId=com.my-mps.codelist.guid&plotId=e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b'
@@ -3519,6 +5111,12 @@ components:
           regulatorySoilType:
             content: CLAY
             listId: nl.agroconnect.codelist.cl405
+          landUseCategory:
+            content: ARL
+            listId: nl.agroconnect.codelist.cl961
+          country:
+            content: NL
+            listId: com.iso.3166-1.alpha2
           links:
             - rel: 'https://ecrop.agroconnect.nl/rel/plot-features'
               href: 'https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items?plotSchemeId=com.my-mps.codelist.guid&plotId=e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b'
@@ -3548,6 +5146,12 @@ components:
           regulatorySoilType:
             content: CLAY
             listId: nl.agroconnect.codelist.cl405
+          landUseCategory:
+            content: GRL
+            listId: nl.agroconnect.codelist.cl961
+          country:
+            content: NL
+            listId: com.iso.3166-1.alpha2
           links:
             - rel: 'https://ecrop.agroconnect.nl/rel/plot-features'
               href: 'https://standard-api.agroconnect.nl/plot-features/v1/collections/plots/items?plotSchemeId=com.my-mps.codelist.guid&plotId=b3c4d5e6-7f8a-9b0c-1d2e-3f4a5b6c7d8e'
@@ -3839,7 +5443,7 @@ components:
           cityName: Naaldwijk
           country:
             content: NL
-            listId: iso.3166-1.alpha2
+            listId: com.iso.3166-1.alpha2
           countryName: Netherlands
           postalBoxId: '4411'
         visitorsAddress:
@@ -3849,7 +5453,7 @@ components:
           streetNumber: '12'
           country:
             content: NL
-            listId: iso.3166-1.alpha2
+            listId: com.iso.3166-1.alpha2
           countryName: Netherlands
     growers_200:
       value:
@@ -3872,7 +5476,7 @@ components:
             cityName: Naaldwijk
             country:
               content: NL
-              listId: iso.3166-1.alpha2
+              listId: com.iso.3166-1.alpha2
             countryName: Netherlands
             postalBoxId: '4411'
           visitorsAddress:
@@ -3882,7 +5486,7 @@ components:
             streetNumber: '12'
             country:
               content: NL
-              listId: iso.3166-1.alpha2
+              listId: com.iso.3166-1.alpha2
             countryName: Netherlands
     supplier_200:
       value:
@@ -3905,7 +5509,7 @@ components:
           streetNumber: '24'
           country:
             content: NL
-            listId: iso.3166-1.alpha2
+            listId: com.iso.3166-1.alpha2
           countryName: Netherlands
     suppliers_200:
       value:
@@ -3928,7 +5532,7 @@ components:
             streetNumber: '24'
             country:
               content: NL
-              listId: iso.3166-1.alpha2
+              listId: com.iso.3166-1.alpha2
             countryName: Netherlands
     contractor_200:
       value:
@@ -3949,7 +5553,7 @@ components:
           streetNumber: '8'
           country:
             content: NL
-            listId: iso.3166-1.alpha2
+            listId: com.iso.3166-1.alpha2
           countryName: Netherlands
     contractors_200:
       value:
@@ -3970,7 +5574,7 @@ components:
             streetNumber: '8'
             country:
               content: NL
-              listId: iso.3166-1.alpha2
+              listId: com.iso.3166-1.alpha2
             countryName: Netherlands
     plot_202:
       value:
@@ -3998,6 +5602,12 @@ components:
         regulatorySoilType:
           content: CLAY
           listId: nl.agroconnect.codelist.cl405
+        landUseCategory:
+          content: ARL
+          listId: nl.agroconnect.codelist.cl961
+        country:
+          content: NL
+          listId: com.iso.3166-1.alpha2
     productionLocations_200:
       value:
         - id:
@@ -4014,7 +5624,7 @@ components:
             streetNumber: '8'
             country:
               content: NL
-              listId: iso.3166-1.alpha2
+              listId: com.iso.3166-1.alpha2
             countryName: Netherlands
     crops_200:
       value:
@@ -4030,7 +5640,7 @@ components:
           year: 2025
           country:
             content: NL
-            listId: iso.3166-1.alpha2
+            listId: com.iso.3166-1.alpha2
           region: string
           useTitle:
             content: string
@@ -4058,8 +5668,12 @@ components:
             listId: nl.agroconnect.codelist.cl300
           trackTillage: false
           plantSpecies:
-            - species: '1010101'
-              variety: '01201'
+            - species:
+                content: '1010101'
+                listId: nl.agroconnect.codelist.cl263
+              variety:
+                content: '01201'
+                listId: nl.agroconnect.codelist.cl232
           plots:
             - id:
                 content: e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b
@@ -4123,7 +5737,7 @@ components:
         year: 2025
         country:
           content: NL
-          listId: iso.3166-1.alpha2
+          listId: com.iso.3166-1.alpha2
         region: string
         useTitle:
           content: string
@@ -4151,8 +5765,12 @@ components:
           listId: nl.agroconnect.codelist.cl300
         trackTillage: false
         plantSpecies:
-          - species: '1010101'
-            variety: '01201'
+          - species:
+              content: '1010101'
+              listId: nl.agroconnect.codelist.cl263
+            variety:
+              content: '01201'
+              listId: nl.agroconnect.codelist.cl232
         plots:
           - id:
               content: e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b
@@ -4214,6 +5832,7 @@ components:
         startDateTime: '2025-03-12T15:51:00+01:00'
         endDateTime: '2025-03-12T16:45:00+01:00'
         status: COMPLETED
+        note: Sprayed in calm weather (wind force 2).
         operations:
           - thirdPartyIds:
               - content: '27575-1'
@@ -4228,6 +5847,7 @@ components:
               content: SPRAYING
               listId: nl.agroconnect.codelist.cl302
             status: COMPLETED
+            note: Boom sprayer with low-drift nozzles.
             area:
               content: 25000
               unitCode:
@@ -4240,7 +5860,7 @@ components:
                 name: Movento
                 type:
                   content: PROTEC
-                  listId: nl.agroconnect.codelist.cl127
+                  listId: nl.agroconnect.codelist.cl271
                 quantity:
                   content: 1200
                   unitCode:
@@ -4272,7 +5892,7 @@ components:
         year: 2025
         country:
           content: NL
-          listId: iso.3166-1.alpha2
+          listId: com.iso.3166-1.alpha2
         region: string
         useTitle:
           content: string
@@ -4300,8 +5920,12 @@ components:
           listId: nl.agroconnect.codelist.cl300
         trackTillage: false
         plantSpecies:
-          - species: '1010101'
-            variety: '01201'
+          - species:
+              content: '1010101'
+              listId: nl.agroconnect.codelist.cl263
+            variety:
+              content: '01201'
+              listId: nl.agroconnect.codelist.cl232
         plots:
           - id:
               content: e7f8a9b0-1c2d-3e4f-5a6b-7c8d9e0f1a2b
@@ -4374,6 +5998,209 @@ components:
         regulatorySoilType:
           content: CLAY
           listId: nl.agroconnect.codelist.cl405
+        landUseCategory:
+          content: ARL
+          listId: nl.agroconnect.codelist.cl961
+        country:
+          content: NL
+          listId: com.iso.3166-1.alpha2
+    footprintdeclarations_200:
+      value:
+        - id:
+            content: 4f1d2c3b-5a6e-4b7f-8c9d-0e1f2a3b4c5d
+            schemeId: com.my-mps.codelist.guid
+          sequenceNumber: 1
+          versionNumber: 2
+          versionDateTime: '2026-02-03T09:30:00+01:00'
+          thirdPartyIds:
+            - content: FD-2025-0001
+              schemeId: com.my-mps.codelist.footprintnummer
+          startDate: '2025-01-01'
+          endDate: '2025-12-31'
+          grower:
+            thirdPartyIds:
+              - content: '09123559'
+                schemeId: nl.kvk.codelist.kvknummer
+              - content: '870012388392'
+                schemeId: com.gs1.codelist.gln
+            name: Kwekerij De Lier
+            personName: J. de Lier
+            phoneNumber: +31(0)74 26653244
+            emailAddress: info@delier.nl
+            websiteUrl: www.delier.nl
+            postalAddress:
+              postalCode: 3521 AA
+              cityName: Naaldwijk
+              country:
+                content: NL
+                listId: com.iso.3166-1.alpha2
+              countryName: Netherlands
+              postalBoxId: '4411'
+            visitorsAddress:
+              postalCode: 3521 AN
+              cityName: Naaldwijk
+              streetName: Broekweg
+              streetNumber: '12'
+              country:
+                content: NL
+                listId: com.iso.3166-1.alpha2
+              countryName: Netherlands
+          cropSection:
+            plantSpecies:
+              species:
+                content: Solanum lycopersicum
+                listId: nl.agroconnect.codelist.cl263
+              variety:
+                content: Merlice
+                listId: nl.agroconnect.codelist.cl232
+              percentageInMix: 100
+            additionalQuestions:
+              - code:
+                  content: GROWING_SYSTEM
+                  listId: nl.agroconnect.codelist.cl265
+                codeValue:
+                  content: SOILLESS
+                  listId: nl.agroconnect.codelist.cl299
+          locationSection:
+            location:
+              thirdPartyIds:
+                - content: '8712345000123'
+                  schemeId: com.gs1.codelist.gln
+              name: Kwekerij De Lier - locatie Naaldwijk
+              visitorsAddress:
+                postalCode: 3521 AN
+                cityName: Naaldwijk
+                streetName: Broekweg
+                streetNumber: '12'
+                country:
+                  content: NL
+                  listId: com.iso.3166-1.alpha2
+            additionalQuestions:
+              - code:
+                  content: GREENHOUSE_AREA
+                  listId: nl.agroconnect.codelist.cl265
+                measureValue:
+                  content: 6000
+                  unitCode:
+                    content: MTK
+                    listId: nl.agroconnect.codelist.cl020
+          cultivationSection:
+            additionalQuestions:
+              - code:
+                  content: GROWING_PERIOD
+                  listId: nl.agroconnect.codelist.cl265
+                measureValue:
+                  content: 40
+                  unitCode:
+                    content: WEE
+                    listId: nl.agroconnect.codelist.cl020
+          cropProtectionSection:
+            cropProtectionApplications:
+              - product:
+                  thirdPartyIds:
+                    - content: 838439 N
+                      schemeId: nl.ctgb.codelist.toelatingsnummer
+                  name: Movento 100 SC - 1L - spirotetramat
+                quantity:
+                  content: 1.2
+                  unitCode:
+                    content: KGM
+                    listId: nl.agroconnect.codelist.cl020
+                substances:
+                  - substance:
+                      thirdPartyIds:
+                        - content: '203313-25-1'
+                          schemeId: nl.cas.codelist.casnummer
+                      name: Spirotetramat
+                    quantity:
+                      content: 0.12
+                      unitCode:
+                        content: KGM
+                        listId: nl.agroconnect.codelist.cl020
+          fertilizerSection:
+            fertilizerApplications:
+              - product:
+                  thirdPartyIds:
+                    - content: '1928'
+                      schemeId: com.iperen.codelist.artikelnummer
+                  name: Kalkammonsalpeter 27
+                type:
+                  content: MINERAL
+                  listId: nl.agroconnect.codelist.cl271
+                quantity:
+                  content: 450
+                  unitCode:
+                    content: KGM
+                    listId: nl.agroconnect.codelist.cl020
+                nutrients:
+                  - nutrient:
+                      thirdPartyIds:
+                        - content: N
+                          schemeId: nl.agroconnect.codelist.nutrient
+                      name: Stikstof (N)
+                    quantity:
+                      content: 121.5
+                      unitCode:
+                        content: KGM
+                        listId: nl.agroconnect.codelist.cl020
+            additionalQuestions: []
+          energySection:
+            energyProductionAndConsumption:
+              - type:
+                  content: ELECTRICITY_CONSUMED
+                  listId: nl.agroconnect.codelist.cl271
+                quantity:
+                  content: 52000
+                  unitCode:
+                    content: KWH
+                    listId: nl.agroconnect.codelist.cl020
+              - type:
+                  content: NATURAL_GAS_CONSUMED
+                  listId: nl.agroconnect.codelist.cl271
+                quantity:
+                  content: 45000
+                  unitCode:
+                    content: MTQ
+                    listId: nl.agroconnect.codelist.cl020
+            additionalQuestions: []
+          waterConsumptionSection:
+            waterConsumptions:
+              - type:
+                  content: RAINWATER
+                  listId: nl.agroconnect.codelist.cl271
+                quantity:
+                  content: 4200
+                  unitCode:
+                    content: MTQ
+                    listId: nl.agroconnect.codelist.cl020
+            additionalQuestions: []
+          wasteSection:
+            additionalQuestions:
+              - code:
+                  content: WASTE_TREATMENT
+                  listId: nl.agroconnect.codelist.cl265
+                stringValue: composted
+          distributionSection:
+            additionalQuestions:
+              - code:
+                  content: TRANSPORT_DISTANCE
+                  listId: nl.agroconnect.codelist.cl265
+                measureValue:
+                  content: 35
+                  unitCode:
+                    content: KMT
+                    listId: nl.agroconnect.codelist.cl020
+          additionalProductSection:
+            additionalProductApplications:
+              - type:
+                  content: PACKAGING
+                  listId: nl.agroconnect.codelist.cl271
+                quantity:
+                  content: 5000
+                  unitCode:
+                    content: KGM
+                    listId: nl.agroconnect.codelist.cl020
+            additionalQuestions: []
   responses:
     ##########################################################################
     # default error responses                                                #
@@ -4820,6 +6647,26 @@ components:
           $ref: '#/components/headers/Request-Id'
         Request-Date-Time:
           $ref: '#/components/headers/Request-Date-Time'
+    footprintdeclarations_200:
+      description: List of footprint declarations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/FootprintDeclaration'
+          examples:
+            default:
+              $ref: '#/components/examples/footprintdeclarations_200'
+      headers:
+        API-Version:
+          $ref: '#/components/headers/API-Version'
+        Request-Id:
+          $ref: '#/components/headers/Request-Id'
+        Request-Date-Time:
+          $ref: '#/components/headers/Request-Date-Time'
+        Link:
+          $ref: '#/components/headers/Link'
     ##########################################################################
     # OGC API Features / JSON-FG responses                                   #
     ##########################################################################
@@ -4981,7 +6828,7 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/InboundDeliveryDetailsGrower'
+            $ref: '#/components/schemas/InboundDeliveryDetailsByGrower'
           examples:
             fertilizer:
               $ref: '#/components/examples/inboundDeliveryDetailsFertilizerByGrower'

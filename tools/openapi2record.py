@@ -126,9 +126,12 @@ class Converter:
 def main(lex_dir, record_nsid, path):
     catalog = Catalog(lex_dir)
     data = json.load(sys.stdin if path == "-" else open(path))
-    if isinstance(data.get("id"), dict):  # server assigned PrimaryId
-        data.pop("id")
     record_schema = catalog.docs[record_nsid]["defs"]["main"]["record"]
+    keeps_id = any(RENAME_NOTE.search(f.get("description", "")) and
+                   RENAME_NOTE.search(f["description"]).group(1) == "id"
+                   for f in record_schema["properties"].values())
+    if isinstance(data.get("id"), dict) and not keeps_id:  # server assigned PrimaryId
+        data.pop("id")
     record = {"$type": record_nsid, **Converter(catalog).convert(data, record_schema, record_nsid)}
     json.dump(record, sys.stdout, indent=2, ensure_ascii=False)
     print()

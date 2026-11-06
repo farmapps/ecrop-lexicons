@@ -25,7 +25,7 @@
       "cityName": "Naaldwijk",
       "country": {
         "content": "NL",
-        "listId": "iso.3166-1.alpha2"
+        "listId": "com.iso.3166-1.alpha2"
       },
       "countryName": "Netherlands",
       "postalBoxId": "4411"
@@ -37,7 +37,7 @@
       "streetNumber": "12",
       "country": {
         "content": "NL",
-        "listId": "iso.3166-1.alpha2"
+        "listId": "com.iso.3166-1.alpha2"
       },
       "countryName": "Netherlands"
     }

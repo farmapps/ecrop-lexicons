@@ -12,7 +12,8 @@
           "thirdPartyIds",
           "name",
           "plotType",
-          "area"
+          "area",
+          "regulatorySoilType"
         ],
         "properties": {
           "thirdPartyIds": {
@@ -64,6 +65,24 @@
             "type": "ref",
             "ref": "nl.agroconnect.ecrop.defs#codeType",
             "description": "Code for the soil type, as subscribed by a regulatory authority (e.g. MLNV-RVO in the Netherlands).\nFor eCrop in The Netherlands code list nl.cl405 is used."
+          },
+          "alternativeName": {
+            "type": "string",
+            "description": "Option to include a second, alternative, name for the plot.\nFor instance to be used to include the name the farmer registered in his FMIS and the name that is registered in the RVO-database."
+          },
+          "region": {
+            "type": "string",
+            "description": "The region the plot is located in."
+          },
+          "country": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#countryCodeType",
+            "description": "The country the plot is located in."
+          },
+          "landUseCategory": {
+            "type": "ref",
+            "ref": "nl.agroconnect.ecrop.defs#codeType",
+            "description": "The land use category of this plot.\nCode list: nl.agroconnect.codelist.cl961. Possible values: ARL (Arable Land), GRL (Grassland), FLL (Fallow Land) and NTA (Natural Area)."
           },
           "greenhouseLocation": {
             "type": "ref",

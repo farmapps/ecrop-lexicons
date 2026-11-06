@@ -43,9 +43,10 @@ RECORDS = {  # record lexicon name -> OpenAPI schema used as record body
     "crop": "CropDetails",
     "plot": "PlotDetails",
     "task": "TaskDetails",
-    "inboundDeliveryByGrower": "InboundDeliveryDetailsGrower",
+    "inboundDeliveryByGrower": "InboundDeliveryDetailsByGrower",
     "inboundDeliveryBySupplier": "InboundDeliveryDetails",
     "plotFeature": "PlotFeatureTopLevel",
+    "footprintDeclaration": "FootprintDeclaration",
 }
 
 SCALE_FACTOR = {
@@ -437,7 +438,8 @@ def renamed(owner, name, field):
     if name == "id":
         if field.get("ref", "").endswith("#primaryIdType"):
             return "primaryId"
-        for key, new in (("worker", "workerId"), ("collection", "collectionId"), ("eature", "featureId")):
+        for key, new in (("worker", "workerId"), ("collection", "collectionId"), ("eature", "featureId"),
+                         ("footprint", "declarationId")):
             if key in owner:
                 return new
     if name == "type":
@@ -445,7 +447,9 @@ def renamed(owner, name, field):
             return "geoJsonType"
         for key, new in (("problemDetails", "problemType"), ("link", "mediaType"), ("plot", "plotType"),
                          ("operation", "operationType"), ("llocation", "allocationType"),
-                         ("equipment", "equipmentType")):
+                         ("equipment", "equipmentType"), ("fertilizer", "fertilizerType"),
+                         ("energy", "energyType"), ("waterConsumption", "waterConsumptionType"),
+                         ("additionalProduct", "additionalProductType")):
             if key in owner:
                 return new
     if name in ("id", "type"):
